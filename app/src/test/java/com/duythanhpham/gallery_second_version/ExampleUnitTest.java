@@ -1,4 +1,4 @@
-package com.duythanhpham.gallery_firstversion;
+package com.duythanhpham.gallery_second_version;
 
 import org.junit.Test;
 

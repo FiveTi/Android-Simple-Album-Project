@@ -1,4 +1,4 @@
-package com.duythanhpham.gallery_firstversion.Misc;
+package com.duythanhpham.gallery_second_version.Misc;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.content.res.Configuration;
 import android.graphics.Point;
 import android.support.annotation.NonNull;
 
-public class ScreenDisplayUtility {
+public class DisplayScreenUtility {
     public static int getScreenWidth(@NonNull Context context) {
         Point size = new Point();
         ((Activity) context).getWindowManager().getDefaultDisplay().getSize(size);
