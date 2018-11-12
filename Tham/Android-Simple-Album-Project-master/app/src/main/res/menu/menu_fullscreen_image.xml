@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/menu_Rotate"
+        android:title="Rotate"></item>
+    <item android:id="@+id/menu_CropImage"
+        android:title="Crop Image"></item>
+    <item android:id="@+id/menu_SetWallpaper"
+        android:title="Set wall paper"></item>
+</menu>

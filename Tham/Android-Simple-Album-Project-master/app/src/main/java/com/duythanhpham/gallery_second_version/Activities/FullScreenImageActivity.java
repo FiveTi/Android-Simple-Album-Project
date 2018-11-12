@@ -1,5 +1,6 @@
 package com.duythanhpham.gallery_second_version.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,12 +8,23 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.GestureDetector;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.widget.ImageButton;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.duythanhpham.gallery_second_version.Adapter.FullScreenImageAdapter;
+import com.duythanhpham.gallery_second_version.Adapter.Function;
 import com.duythanhpham.gallery_second_version.Adapter.Interface.IFullScreenImageLoader;
 import com.duythanhpham.gallery_second_version.R;
 
@@ -27,33 +39,22 @@ public class FullScreenImageActivity extends AppCompatActivity implements IFullS
     // endregion
 
     private ViewPager viewPager;
-    //private Toolbar toolbar;
-
     // region Member Variables
     private List<GalleryImage> imageList;
     private int position;
+    private int function;
     private static IFullScreenImageLoader iFullScreenImageLoader;
     // endregion
-    ImageButton rotateImgButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fullscreen_image_activity);
 
-        getSupportActionBar().setTitle("FullScreenImageActivity");
+        getSupportActionBar().setTitle("FullScreenImage");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         viewPager = findViewById(R.id.vp);
- /*       rotateImgButton = (ImageButton)findViewById(R.id.rotateImgBtn);
-    rotateImgButton.setOnClickListener(new View.OnClickListener() {
-    @Override
-        public void onClick(View v) {
-        ImageView imageRotate = (ImageView)findViewById(R.id.rotateImgBtn);
-        imageRotate.setRotation(imageRotate.getRotation() + 90);
-        }
-    });
-*/
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -67,6 +68,27 @@ public class FullScreenImageActivity extends AppCompatActivity implements IFullS
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_fullscreen_image, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.menu_Rotate:
+              //xử lý xoay ảnh
+                break;
+            case R.id.menu_CropImage:
+                //xử lý crop ảnh
+            case R.id.menu_SetWallpaper:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void LoadFullScreenImage(ImageView iv, Integer imageID, int width, LinearLayout bglinearLayout) {
         iFullScreenImageLoader.LoadFullScreenImage(iv, imageID, width, bglinearLayout);
     }
@@ -76,6 +98,7 @@ public class FullScreenImageActivity extends AppCompatActivity implements IFullS
         images.addAll(imageList);
 
         FullScreenImageAdapter fullScreenImageAdapter = new FullScreenImageAdapter(this, images);
+        fullScreenImageAdapter.setFuntion(function);
         fullScreenImageAdapter.setFullScreenImageLoader(this);
         viewPager.setAdapter(fullScreenImageAdapter);
         viewPager.addOnPageChangeListener(viewPagerOnPageChangeListener);

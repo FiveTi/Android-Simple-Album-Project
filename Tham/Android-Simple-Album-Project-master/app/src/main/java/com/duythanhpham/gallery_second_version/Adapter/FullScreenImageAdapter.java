@@ -6,9 +6,12 @@ import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.duythanhpham.gallery_second_version.Activities.FullScreenImageActivity;
 import com.duythanhpham.gallery_second_version.Activities.GalleryImage;
 import com.duythanhpham.gallery_second_version.Adapter.Interface.IFullScreenImageLoader;
 import com.duythanhpham.gallery_second_version.Misc.DisplayScreenUtility;
@@ -21,6 +24,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
     private final List<GalleryImage> images;
     private IFullScreenImageLoader iFullScreenImageLoader;
     private Context context;
+    private int funtion;
     // endregion
 
     public FullScreenImageAdapter(Context context, List<GalleryImage> images) {
@@ -51,20 +55,35 @@ public class FullScreenImageAdapter extends PagerAdapter {
         //View view = inflater.inflate(R.layout.fullscreen_image_layout, null);
        View view = LayoutInflater.from(container.getContext()).inflate(R.layout.fullscreen_image_layout, container, false);
 
-        ImageView imageView = view.findViewById(R.id.fullscreen_image);
-        final LinearLayout linearLayout = view.findViewById(R.id.ll);
+       final ImageView imageView = view.findViewById(R.id.fullscreen_image);
+       final LinearLayout linearLayout = view.findViewById(R.id.ll);
 
-        Integer imageID = images.get(position).getImage_ID();
-        Context context = imageView.getContext();
-        int ScreenWidth = DisplayScreenUtility.getScreenWidth(context);
-        iFullScreenImageLoader.LoadFullScreenImage(imageView, imageID, ScreenWidth, linearLayout);
+       Function f = new Function(view,imageView);
+       f.Zoom();
 
-        container.addView(view, 0);
+       Integer imageID = images.get(position).getImage_ID();
+       Context context = imageView.getContext();
+       int ScreenWidth = DisplayScreenUtility.getScreenWidth(context);
+       iFullScreenImageLoader.LoadFullScreenImage(imageView, imageID, ScreenWidth, linearLayout);
 
-        return view;
+       container.addView(view, 0);
+
+       return view;
     }
 
     public void setFullScreenImageLoader(IFullScreenImageLoader loader) {
         this.iFullScreenImageLoader = loader;
     }
+
+    public void setFuntion(int f)
+    {
+        funtion = f;
+    }
+
+    public View getView(ViewGroup parent) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fullscreen_image_layout, parent, false);
+        return view;
+    }
+
+
 }
