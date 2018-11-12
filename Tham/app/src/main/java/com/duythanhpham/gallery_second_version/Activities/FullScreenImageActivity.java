@@ -7,6 +7,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -32,7 +34,7 @@ public class FullScreenImageActivity extends AppCompatActivity implements IFullS
     private int position;
     private static IFullScreenImageLoader iFullScreenImageLoader;
     // endregion
-
+    ImageButton rotateImgButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,7 +45,15 @@ public class FullScreenImageActivity extends AppCompatActivity implements IFullS
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         viewPager = findViewById(R.id.vp);
-
+ /*       rotateImgButton = (ImageButton)findViewById(R.id.rotateImgBtn);
+    rotateImgButton.setOnClickListener(new View.OnClickListener() {
+    @Override
+        public void onClick(View v) {
+        ImageView imageRotate = (ImageView)findViewById(R.id.rotateImgBtn);
+        imageRotate.setRotation(imageRotate.getRotation() + 90);
+        }
+    });
+*/
 
         Intent intent = getIntent();
         if (intent != null) {
