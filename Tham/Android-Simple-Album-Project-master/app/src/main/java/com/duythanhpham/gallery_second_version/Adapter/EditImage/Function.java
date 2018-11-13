@@ -30,7 +30,13 @@ public class Function extends FullScreenImageActivity {
         imgView = imgV;
     }
 
+    public void setImgView(ImageView imgView) {
+        this.imgView = imgView;
+    }
 
+    public ImageView getImgView() {
+        return imgView;
+    }
 
     public void RotateImage()
     {

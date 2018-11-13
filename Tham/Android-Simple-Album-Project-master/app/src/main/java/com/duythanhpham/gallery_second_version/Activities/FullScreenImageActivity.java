@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.duythanhpham.gallery_second_version.Adapter.EditImage.Function;
 import com.duythanhpham.gallery_second_version.Adapter.FullScreenImageAdapter;
 import com.duythanhpham.gallery_second_version.Adapter.Interface.IFullScreenImageLoader;
 import com.duythanhpham.gallery_second_version.R;
@@ -61,6 +62,7 @@ public class FullScreenImageActivity extends AppCompatActivity implements IFullS
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId())
         {
             case R.id.menu_Info:
@@ -74,7 +76,7 @@ public class FullScreenImageActivity extends AppCompatActivity implements IFullS
                 break;
             case R.id.menu_Rotate:
 
-              //xử lý xoay ảnh
+              //xử lý xoay  ảnh
                 break;
             case R.id.menu_CropImage:
 
