@@ -6,13 +6,11 @@ import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.duythanhpham.gallery_second_version.Activities.FullScreenImageActivity;
 import com.duythanhpham.gallery_second_version.Activities.GalleryImage;
+import com.duythanhpham.gallery_second_version.Adapter.EditImage.Function;
 import com.duythanhpham.gallery_second_version.Adapter.Interface.IFullScreenImageLoader;
 import com.duythanhpham.gallery_second_version.Misc.DisplayScreenUtility;
 import com.duythanhpham.gallery_second_version.R;

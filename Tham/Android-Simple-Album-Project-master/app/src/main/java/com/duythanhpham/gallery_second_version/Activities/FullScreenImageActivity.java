@@ -1,30 +1,16 @@
 package com.duythanhpham.gallery_second_version.Activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.GestureDetector;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.duythanhpham.gallery_second_version.Adapter.FullScreenImageAdapter;
-import com.duythanhpham.gallery_second_version.Adapter.Function;
 import com.duythanhpham.gallery_second_version.Adapter.Interface.IFullScreenImageLoader;
 import com.duythanhpham.gallery_second_version.R;
 
@@ -77,12 +63,24 @@ public class FullScreenImageActivity extends AppCompatActivity implements IFullS
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
         {
+            case R.id.menu_Info:
+
+                break;
+            case R.id.menu_Delete:
+
+                break;
+            case R.id.menu_Edit:
+
+                break;
             case R.id.menu_Rotate:
+
               //xử lý xoay ảnh
                 break;
             case R.id.menu_CropImage:
+
                 //xử lý crop ảnh
             case R.id.menu_SetWallpaper:
+
                 break;
         }
         return super.onOptionsItemSelected(item);
