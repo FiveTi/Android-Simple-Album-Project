@@ -5,22 +5,14 @@
     android:layout_height="match_parent"
     android:id="@+id/ll">
 
-
     <ImageView
         android:id="@+id/fullscreen_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#0c0e0c"
+        android:layout_weight="1"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
-        android:layout_weight="1"
-        />
-
-    <Button
-        android:id="@+id/RotateButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Rotate"
-        android:layout_gravity="bottom"
-        />
+        android:visibility="visible" />
 
 </LinearLayout>

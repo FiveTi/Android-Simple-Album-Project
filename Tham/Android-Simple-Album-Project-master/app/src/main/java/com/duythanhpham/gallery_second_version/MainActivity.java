@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getSupportActionBar().setTitle("MainActivity");
 
         btnMoApp = findViewById(R.id.MoApp);
 
@@ -101,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void LoadImageThumbnail(ImageView iv, Integer imageID, int dimension) {
         Picasso.with(iv.getContext())
                 .load(imageID)
-                .resize(100, 100)
+                .resize(dimension, dimension)
                 .centerCrop()
                 .into(iv);
     }

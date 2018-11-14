@@ -33,5 +33,4 @@ public class GalleryImage implements Serializable {
     public void setImage_ID(Integer android_image_url) {
         this.image_id = android_image_url;
     }
-
 }

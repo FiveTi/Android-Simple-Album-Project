@@ -42,10 +42,6 @@ public class ImageThumbnailActivity extends AppCompatActivity implements IImageC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.image_thumbnail_activity);
 
-        getSupportActionBar().setTitle("ImageThumbnailActivity");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
         toolbar = findViewById(R.id.toolbar);
         recyclerView = findViewById(R.id.image_thumbnail_recyclerview);
         recyclerView.setHasFixedSize(true);
@@ -54,13 +50,6 @@ public class ImageThumbnailActivity extends AppCompatActivity implements IImageC
         if (intent != null) {
             imageList = (ArrayList<GalleryImage>) intent.getSerializableExtra(KEY_IMAGE_LIST);
         }
-
-//        setSupportActionBar(toolbar);
-//        ActionBar actionBar = getSupportActionBar();
-//        if (actionBar != null) {
-//            actionBar.setDisplayHomeAsUpEnabled(true);
-//            //actionBar.setTitle(title);
-//        }
 
         SetUpRecyclerView();
     }
@@ -77,6 +66,7 @@ public class ImageThumbnailActivity extends AppCompatActivity implements IImageC
         imageThumbnailAdapter = new ImageThumbnailAdapter(this, imageList);
         imageThumbnailAdapter.setOnImageClickListener(this);
         imageThumbnailAdapter.setImageThumbnailLoader(this);
+        imageThumbnailAdapter.notifyDataSetChanged();
 
         recyclerView.setAdapter(imageThumbnailAdapter);
     }
@@ -92,6 +82,16 @@ public class ImageThumbnailActivity extends AppCompatActivity implements IImageC
         intent.putExtra(FullScreenImageActivity.KEY_IMAGE_LIST, imageList);
 
         startActivity(intent);
+    }
+
+    @Override
+    public void OnDeleteClick(int position) {
+        removeItem(position );
+    }
+
+    public void removeItem(int position) {
+        imageList.remove(position);
+        imageThumbnailAdapter.notifyItemRemoved(position);
     }
 
     @Override

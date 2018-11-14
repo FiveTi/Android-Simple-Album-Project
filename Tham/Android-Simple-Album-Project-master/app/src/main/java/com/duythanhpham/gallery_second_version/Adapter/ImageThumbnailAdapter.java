@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.duythanhpham.gallery_second_version.Activities.GalleryImage;
 import com.duythanhpham.gallery_second_version.Adapter.Interface.IImageClickedListener;
 import com.duythanhpham.gallery_second_version.Adapter.Interface.IImageThumbnailLoader;
+import com.duythanhpham.gallery_second_version.Misc.DisplayScreenUtility;
 import com.duythanhpham.gallery_second_version.R;
 
 import java.util.ArrayList;
@@ -21,12 +22,23 @@ public class ImageThumbnailAdapter extends RecyclerView.Adapter<ImageThumbnailAd
     private ArrayList<GalleryImage> galleryList;
     private Context context;
 
-    IImageThumbnailLoader onImageThumbnailLoader;
-    IImageClickedListener onImageClickedListener;
+    private IImageThumbnailLoader onImageThumbnailLoader;
+    private IImageClickedListener onImageClickedListener;
+    private int imageThumbnailWidth;
+
 
     public ImageThumbnailAdapter(Context context, ArrayList<GalleryImage> galleryList) {
         this.galleryList = galleryList;
         this.context = context;
+
+        int numOfColumns;
+        if (DisplayScreenUtility.isInLandscapeMode(context)) {
+            numOfColumns = 4;
+        } else {
+            numOfColumns = 3;
+        }
+
+        imageThumbnailWidth = DisplayScreenUtility.getScreenWidth(context) / numOfColumns;
     }
 
     @Override
@@ -37,10 +49,9 @@ public class ImageThumbnailAdapter extends RecyclerView.Adapter<ImageThumbnailAd
 
     @Override
     public void onBindViewHolder(final ImageThumbnailAdapter.ViewHolder viewHolder, int i) {
-        viewHolder.title.setText(galleryList.get(i).getImage_title());
-        //viewHolder.img.setImageResource((galleryList.get(i).getImage_ID()));
+        //viewHolder.title.setText(galleryList.get(i).getImage_title());
 
-        onImageThumbnailLoader.LoadImageThumbnail(viewHolder.img, galleryList.get(i).getImage_ID(), 100 );
+        onImageThumbnailLoader.LoadImageThumbnail(viewHolder.img, galleryList.get(i).getImage_ID(), imageThumbnailWidth );
 
         viewHolder.img.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,6 +59,16 @@ public class ImageThumbnailAdapter extends RecyclerView.Adapter<ImageThumbnailAd
                 int imagePosition = viewHolder.getAdapterPosition();
                 if(imagePosition != RecyclerView.NO_POSITION){
                     onImageClickedListener.OnImageClick(imagePosition);
+                }
+            }
+        });
+
+        viewHolder.imgDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int imagePosition = viewHolder.getAdapterPosition();
+                if(imagePosition != RecyclerView.NO_POSITION){
+                    onImageClickedListener.OnDeleteClick(imagePosition);
                 }
             }
         });
@@ -68,13 +89,14 @@ public class ImageThumbnailAdapter extends RecyclerView.Adapter<ImageThumbnailAd
 
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        private TextView title;
-        private ImageView img;
+        //private TextView title;
+        private ImageView img, imgDelete;
         public ViewHolder(View view) {
             super(view);
 
-            title = view.findViewById(R.id.title);
+            //title = view.findViewById(R.id.title);
             img = view.findViewById(R.id.img);
+            imgDelete = view.findViewById(R.id.image_delete);
         }
     }
 }
