@@ -74,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
                 Uri photoUri = FileProvider.getUriForFile(MainActivity.this, "com.example.yagami.camera.fileprovider", photoFile);
                 takePic.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
                 startActivityForResult(takePic, 1);
-                setPic();
                 addPicToAlbum();
+                setPic();
             }
         }
     }
