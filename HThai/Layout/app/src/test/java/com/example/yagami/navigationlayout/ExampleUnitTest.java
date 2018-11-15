@@ -1,4 +1,4 @@
-package com.example.yagami.navigationdrawer;
+package com.example.yagami.navigationlayout;
 
 import org.junit.Test;
 
