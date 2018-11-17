@@ -16,19 +16,17 @@ import com.example.yagami.navigationlayout.R;
 
 import java.util.ArrayList;
 
-public class GridViewAdapter extends ArrayAdapter<ImagePath> {
+public class AlbumAdapter extends ArrayAdapter<ImagePath> {
 
     Context context;
     ViewHolder viewHolder;
     ArrayList<ImagePath> allPath = new ArrayList<>();
-    int int_position;
 
 
-    public GridViewAdapter(Context context, ArrayList<ImagePath> al_menu,int int_position) {
+    public AlbumAdapter(Context context, ArrayList<ImagePath> al_menu) {
         super(context, R.layout.grid_image_layout, al_menu);
         this.allPath = al_menu;
         this.context = context;
-        this.int_position = int_position;
 
 
     }
@@ -36,8 +34,8 @@ public class GridViewAdapter extends ArrayAdapter<ImagePath> {
     @Override
     public int getCount() {
 
-        Log.e("ADAPTER LIST SIZE", allPath.get(int_position).getAllImagePath().size() + "");
-        return allPath.get(int_position).getAllImagePath().size();
+        Log.e("ADAPTER LIST SIZE", allPath.size() + "");
+        return allPath.size();
     }
 
     @Override
@@ -47,8 +45,8 @@ public class GridViewAdapter extends ArrayAdapter<ImagePath> {
 
     @Override
     public int getViewTypeCount() {
-        if (allPath.get(int_position).getAllImagePath().size() > 0) {
-            return allPath.get(int_position).getAllImagePath().size();
+        if (allPath.size() > 0) {
+            return allPath.size();
         } else {
             return 1;
         }
@@ -77,12 +75,12 @@ public class GridViewAdapter extends ArrayAdapter<ImagePath> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.folder.setVisibility(View.GONE);
-        viewHolder.number.setVisibility(View.GONE);
+        viewHolder.folder.setText(allPath.get(position).getFolder());
+        viewHolder.number.setText(allPath.get(position).getAllImagePath().size()+"");
 
 
 
-        Glide.with(context).load("file://" + allPath.get(int_position).getAllImagePath().get(position))
+        Glide.with(context).load("file://" + allPath.get(position).getAllImagePath().get(0))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(viewHolder.imageAlbum);
@@ -95,6 +93,9 @@ public class GridViewAdapter extends ArrayAdapter<ImagePath> {
     private static class ViewHolder {
         TextView folder, number;
         ImageView imageAlbum;
-    }
-}
 
+
+    }
+
+
+}

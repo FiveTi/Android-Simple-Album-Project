@@ -1,4 +1,4 @@
-package com.example.yagami.navigationlayout;
+package com.example.yagami.navigationlayout.Activity;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
@@ -21,10 +22,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.GridView;
 import android.widget.Toast;
 
-import com.example.yagami.navigationlayout.Adapter.GridViewAdapter;
+import com.example.yagami.navigationlayout.Fragment.AlbumFragment;
+import com.example.yagami.navigationlayout.Fragment.GalleryFragment;
+import com.example.yagami.navigationlayout.ImagePath;
+import com.example.yagami.navigationlayout.R;
 
 import java.util.ArrayList;
 
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private static final int REQUEST_PERMISSIONS = 100;
     private String ARRAY_PATH = "array_path";
+    int position = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,13 +133,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         {
             case R.id.nav_gallery:
                 fragmentSlected = new GalleryFragment();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(ARRAY_PATH, al_images);
-                fragmentSlected.setArguments(bundle);
+                Bundle bGallery = new Bundle();
+                bGallery.putSerializable(ARRAY_PATH, al_images);
+                bGallery.putInt("position", position);
+                fragmentSlected.setArguments(bGallery);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentSlected).commit();
+                break;
+            case R.id.nav_album:
+                fragmentSlected = new AlbumFragment();
+                Bundle bAlbum = new Bundle();
+                bAlbum.putSerializable(ARRAY_PATH, al_images);
+                fragmentSlected.setArguments(bAlbum);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentSlected).commit();
                 break;
         }
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentSlected).commit();
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -215,4 +228,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    public void Back(View v)
+    {
+        getSupportFragmentManager().popBackStack();
+    }
 }

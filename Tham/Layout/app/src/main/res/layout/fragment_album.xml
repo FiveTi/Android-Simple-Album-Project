@@ -8,7 +8,7 @@
     <GridView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/gridViewGallery"
+        android:id="@+id/gridViewAlbum"
         android:numColumns="2"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"></GridView>
