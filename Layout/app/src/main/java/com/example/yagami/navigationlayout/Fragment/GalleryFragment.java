@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.example.yagami.navigationlayout.Adapter.GridViewAdapter;
@@ -56,6 +57,31 @@ public class GalleryFragment extends Fragment {
             adapter = new GridViewAdapter(v.getContext(),allPath,position);
         }
         gvAlbum.setAdapter(adapter);
+
+        gvAlbum.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
+                if(position == -1) {
+                    position = 0;
+                    for (int j = 0; j < allPath.size(); j++) {
+                        if (i >= allPath.get(j).getAllImagePath().size()) {
+                            i = i - allPath.get(j).getAllImagePath().size();
+                            position = j + 1;
+                        } else {
+                            j = allPath.size();
+                        }
+                    }
+                }
+                FullImageFragment fullImageFragment = new FullImageFragment();
+                Bundle bFullImage = new Bundle();
+                bFullImage.putSerializable(ARRAY_PATH, allPath);
+                bFullImage.putInt("position", position);
+                bFullImage.putInt("posImage", i);
+                fullImageFragment.setArguments(bFullImage);
+                getFragmentManager().beginTransaction().replace(R.id.fragment_container, fullImageFragment).addToBackStack("fullImage").commit();
+            }
+        });
+
         return v;
     }
 }

@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -22,6 +23,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.yagami.navigationlayout.Fragment.AlbumFragment;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int REQUEST_PERMISSIONS = 100;
     private String ARRAY_PATH = "array_path";
     int position = -1;
+    Button ButtonBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        ButtonBack = (Button)findViewById(R.id.buttonBack);
+        ButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getSupportFragmentManager().popBackStack();
+            }
+        });
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,6 +93,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             all_path = getImagesPath();
         }
 
+        GalleryFragment fragment = new GalleryFragment();
+        Bundle bGallery = new Bundle();
+        bGallery.putSerializable(ARRAY_PATH, al_images);
+        bGallery.putInt("position", position);
+        fragment.setArguments(bGallery);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
     }
 
     @Override
@@ -131,19 +148,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch(item.getItemId())
         {
             case R.id.nav_gallery:
+
                 fragmentSlected = new GalleryFragment();
                 Bundle bGallery = new Bundle();
                 bGallery.putSerializable(ARRAY_PATH, al_images);
                 bGallery.putInt("position", position);
                 fragmentSlected.setArguments(bGallery);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentSlected).commit();
+               getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentSlected).addToBackStack("gallery").commit();
                 break;
             case R.id.nav_album:
                 fragmentSlected = new AlbumFragment();
                 Bundle bAlbum = new Bundle();
                 bAlbum.putSerializable(ARRAY_PATH, al_images);
                 fragmentSlected.setArguments(bAlbum);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentSlected).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentSlected).addToBackStack("album").commit();
                 break;
         }
 
@@ -227,8 +245,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    public void Back(View v)
-    {
-        getSupportFragmentManager().popBackStack();
-    }
+//    public void Back(View v)
+//    {
+//        getSupportFragmentManager().popBackStack();
+//    }
 }

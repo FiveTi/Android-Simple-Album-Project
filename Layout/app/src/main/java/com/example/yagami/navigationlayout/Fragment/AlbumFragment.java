@@ -49,7 +49,7 @@ public class AlbumFragment extends Fragment {
             bGallery.putSerializable(ARRAY_PATH, allPath);
             bGallery.putInt("position", i);
             galleryFragment.setArguments(bGallery);
-            getFragmentManager().beginTransaction().replace(R.id.fragment_container, galleryFragment).commit();
+            getFragmentManager().beginTransaction().replace(R.id.fragment_container, galleryFragment).addToBackStack("gallery").commit();
             }
         });
 
