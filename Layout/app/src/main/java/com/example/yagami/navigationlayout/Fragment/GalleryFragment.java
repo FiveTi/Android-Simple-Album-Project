@@ -5,11 +5,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.example.yagami.navigationlayout.Activity.MainActivity;
 import com.example.yagami.navigationlayout.Adapter.GridViewAdapter;
 import com.example.yagami.navigationlayout.ImagePath;
 import com.example.yagami.navigationlayout.R;
@@ -34,8 +38,8 @@ public class GalleryFragment extends Fragment {
         Bundle bGallery = getArguments();
         allPath = (ArrayList<ImagePath>)bGallery.getSerializable(ARRAY_PATH);
         position = bGallery.getInt("position");
-
         if(position == -1) {
+
             ArrayList<String> allImagePath = new ArrayList<>();
 
             for (int i = 0; i < allPath.size(); i++) {
@@ -83,6 +87,36 @@ public class GalleryFragment extends Fragment {
         });
 
         return v;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+
+        switch(item.getItemId())
+        {
+            case R.id.nav_camera:
+                break;
+            case R.id.nav_edit:
+                break;
+            case R.id.nav_share:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
 

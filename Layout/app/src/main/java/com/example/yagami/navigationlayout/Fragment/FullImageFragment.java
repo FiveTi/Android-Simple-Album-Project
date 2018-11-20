@@ -5,12 +5,16 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.yagami.navigationlayout.Activity.MainActivity;
 import com.example.yagami.navigationlayout.ImagePath;
 import com.example.yagami.navigationlayout.R;
 
@@ -42,4 +46,17 @@ public class FullImageFragment extends Fragment {
 
         return v;
     }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.fullimage_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
 }
