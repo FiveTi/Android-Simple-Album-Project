@@ -42,8 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int REQUEST_PERMISSIONS = 100;
     private String ARRAY_PATH = "array_path";
     int position = -1;
-    Button ButtonBack;
-
+    FloatingActionButton fabBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,19 +50,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ButtonBack = (Button)findViewById(R.id.buttonBack);
-        ButtonBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getSupportFragmentManager().popBackStack();
-            }
-        });
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+
+        fabBack= (FloatingActionButton) findViewById(R.id.fabBack);
+        fabBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                getSupportFragmentManager().popBackStack();
             }
         });
 
