@@ -1,5 +1,6 @@
 package com.example.yagami.navigationlayout.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.example.yagami.navigationlayout.Activity.MainActivity;
+import com.example.yagami.navigationlayout.Activity.openCamera;
 import com.example.yagami.navigationlayout.Adapter.GridViewAdapter;
 import com.example.yagami.navigationlayout.ImagePath;
 import com.example.yagami.navigationlayout.R;
@@ -110,6 +112,8 @@ public class GalleryFragment extends Fragment {
         switch(item.getItemId())
         {
             case R.id.nav_camera:
+                Intent camera=new Intent(getActivity(),openCamera.class);
+                startActivity(camera);
                 break;
             case R.id.nav_edit:
                 break;
