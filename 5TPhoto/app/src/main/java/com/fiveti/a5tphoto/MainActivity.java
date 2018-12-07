@@ -54,19 +54,20 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         setupViewPager(mViewPager);
         mTabLayout.setupWithViewPager(mViewPager);
-
+        all_path = getImagesPath();
 
     }
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.add(getResources().getString(R.string.first), getResources().getColor(R.color.cyan));
-        adapter.add(getResources().getString(R.string.second), getResources().getColor(R.color.teal));
-        adapter.add(getResources().getString(R.string.third), getResources().getColor(R.color.amber));
+
+        adapter.add(getResources().getString(R.string.first), 1);
+        adapter.add(getResources().getString(R.string.second), 2);
+        adapter.add(getResources().getString(R.string.third), 1);
         viewPager.setAdapter(adapter);
     }
 
-    static class ViewPagerAdapter extends FragmentPagerAdapter {
+    class ViewPagerAdapter extends FragmentPagerAdapter {
         private List<Fragment> mFragmentList = new ArrayList<>();
         private List<String> mFragmentTitleList = new ArrayList<>();
 
@@ -84,8 +85,15 @@ public class MainActivity extends AppCompatActivity {
             return mFragmentList.size();
         }
 
-        public void add(String title, int color) {
-            Fragment fragment = DummyFragment.newInstance(title, color);
+        public void add(String title, int id) {
+            Fragment fragment = null;
+            if(id == 1) {
+                fragment = openGallery();
+            }
+            else if(id == 2)
+            {
+                fragment = openAlbum();
+            }
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
         }
@@ -200,24 +208,24 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
-
         return al_images;
     }
 
-    public void openGallery() {
-        fragmentSlected = new GalleryFragment();
+    public Fragment openGallery() {
+        Fragment fragment = new GalleryFragment();
         Bundle bGallery = new Bundle();
         bGallery.putSerializable(ARRAY_PATH, al_images);
         bGallery.putInt("position", position);
-        fragmentSlected.setArguments(bGallery);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentSlected).addToBackStack("gallery").commit();
+        fragment.setArguments(bGallery);
+        return fragment;
+
     }
 
-    public void openAlbum() {
-        fragmentSlected = new AlbumFragment();
-        Bundle bAlbum = new Bundle();
+    public Fragment openAlbum() {
+        Fragment fragment = new AlbumFragment();
+        Bundle  bAlbum = new Bundle();
         bAlbum.putSerializable(ARRAY_PATH, al_images);
-        fragmentSlected.setArguments(bAlbum);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentSlected).addToBackStack("album").commit();
+        fragment.setArguments(bAlbum);
+        return fragment;
     }
 }

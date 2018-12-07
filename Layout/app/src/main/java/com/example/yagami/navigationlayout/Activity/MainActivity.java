@@ -132,6 +132,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragmentSlected.setArguments(bAlbum);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentSlected).addToBackStack("album").commit();
                 break;
+            case R.id.nav_contact:
+                break;
         }
 
 

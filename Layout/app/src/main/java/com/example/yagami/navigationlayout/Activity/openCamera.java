@@ -23,7 +23,7 @@ import java.util.Date;
 
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
-public class openCamera extends AppCompatActivity {
+public class openCamera extends AppCompatActivity  {
 
     String pathToFile;
     File photoFile = null;
@@ -36,22 +36,22 @@ public class openCamera extends AppCompatActivity {
         getIntent();
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(new String[]{Manifest.permission.CAMERA}, 2);
-        }
-        dispatchPictureTakeAction();
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            requestPermissions(new String[]{Manifest.permission.CAMERA}, 2);
+//        }
+//        dispatchPictureTakeAction();
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_OK) {
-            if (requestCode == 1) {
-                Bitmap bitmap = BitmapFactory.decodeFile(pathToFile);
-            }
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == RESULT_OK) {
+//            if (requestCode == 1) {
+//                Bitmap bitmap = BitmapFactory.decodeFile(pathToFile);
+//            }
+//        }
+//    }
 
     private void dispatchPictureTakeAction() {
         Intent takePic = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
