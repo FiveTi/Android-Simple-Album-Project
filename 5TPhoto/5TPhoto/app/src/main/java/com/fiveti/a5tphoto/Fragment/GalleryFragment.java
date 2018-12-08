@@ -13,7 +13,7 @@ import android.widget.GridView;
 
 import com.fiveti.a5tphoto.Activity.FullscreenActivity;
 import com.fiveti.a5tphoto.Adapter.GridViewAdapter;
-import com.fiveti.a5tphoto.ImagePath;
+import com.fiveti.a5tphoto.Album;
 import com.fiveti.a5tphoto.R;
 
 import java.util.ArrayList;
@@ -23,9 +23,8 @@ public class GalleryFragment extends Fragment {
     GridViewAdapter adapter;
 
     private String ARRAY_PATH = "array_path";
-    public static ArrayList<ImagePath> allPath = new ArrayList<>();
-    public static ArrayList<ImagePath> allPathGalery = new ArrayList<>();
-    int position;
+    public static ArrayList<Album> all_images_path = new ArrayList<>();
+    public static ArrayList<Album> allPathGalery = new ArrayList<>();
 
     public static int NUM_GRID_COLUMNS=4;
 
@@ -37,28 +36,26 @@ public class GalleryFragment extends Fragment {
         gvAlbum = (GridView) v.findViewById(R.id.gridViewGallery);
 
         Bundle bGallery = getArguments();
-        allPath = (ArrayList<ImagePath>) bGallery.getSerializable(ARRAY_PATH);
-        position = bGallery.getInt("position");
-        if (position == -1) {
+        all_images_path = (ArrayList<Album>) bGallery.getSerializable(ARRAY_PATH);
 
-            ArrayList<String> allImagePath = new ArrayList<>();
+        // dua het tat ca duong dan hinh anh vao mot thu muc de load vao tab layout gallery
+        ArrayList<String> allImagePath = new ArrayList<>();
+        for (int i = 0; i < all_images_path.size(); i++) {
 
-            for (int i = 0; i < allPath.size(); i++) {
-                for (int j = 0; j < allPath.get(i).getAllImagePath().size(); j++) {
-                    allImagePath.add(allPath.get(i).getAllImagePath().get(j));
-                }
+            for (int j = 0; j < all_images_path.get(i).getAllImagePath().size(); j++) {
+
+                allImagePath.add(all_images_path.get(i).getAllImagePath().get(j));
+
             }
 
-            ImagePath obj = new ImagePath();
-            obj.setFolder(allPath.get(0).getFolder());
-            obj.setAllImagePath(allImagePath);
-
-            allPathGalery.add(obj);
-
-            adapter = new GridViewAdapter(v.getContext(), allPathGalery, 0);
-        } else {
-            adapter = new GridViewAdapter(v.getContext(), allPath, position);
         }
+
+        Album obj = new Album();
+        obj.setFolder(all_images_path.get(0).getFolder());
+        obj.setAllImagePath(allImagePath);
+        allPathGalery.add(obj);
+        //
+        adapter = new GridViewAdapter(v.getContext(), allPathGalery, 0);
 
         int gridWidth=gvAlbum.getResources().getDisplayMetrics().widthPixels;
 
@@ -71,23 +68,11 @@ public class GalleryFragment extends Fragment {
         gvAlbum.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-                if (position == -1) {
-                    position = 0;
-                    for (int j = 0; j < allPath.size(); j++) {
-                        if (i >= allPath.get(j).getAllImagePath().size()) {
-                            i = i - allPath.get(j).getAllImagePath().size();
-                            position = j + 1;
-                        } else {
-                            j = allPath.size();
-                        }
-                    }
-                }
-
                 Intent iFullImage = new Intent(getActivity(), FullscreenActivity.class);
-                //Gửi vị trí ảnh hiện tại, tên ảnh và cả mảng file
+                //Gửi vị trí ảnh hiện tại và cả mảng file
                 Bundle bFullImage = new Bundle();
-                bFullImage.putSerializable(ARRAY_PATH, allPath);
-                bFullImage.putInt("posAlbum", position);
+                bFullImage.putSerializable(ARRAY_PATH, allPathGalery);
+                bFullImage.putInt("posAlbum", 0);
                 bFullImage.putInt("posImage", i);
                 iFullImage.putExtras(bFullImage);
                 startActivity(iFullImage);

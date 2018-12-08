@@ -1,17 +1,10 @@
 package com.fiveti.a5tphoto.Activity;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -20,45 +13,25 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.AttributeSet;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
-import android.widget.FrameLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fiveti.a5tphoto.Fragment.AlbumFragment;
 import com.fiveti.a5tphoto.Fragment.GalleryFragment;
-import com.fiveti.a5tphoto.ImagePath;
+import com.fiveti.a5tphoto.Album;
 import com.fiveti.a5tphoto.OpenCamera.openCamera;
 import com.fiveti.a5tphoto.R;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.MultiplePermissionsReport;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static ArrayList<ImagePath> al_images = new ArrayList<>();
-    public static ArrayList<ImagePath> allPath = new ArrayList<>();
+    public static ArrayList<Album> all_images_path = new ArrayList<>();
     boolean boolean_folder;
 
     private static final int REQUEST_PERMISSIONS = 100;
     private String ARRAY_PATH = "array_path";
-    int position = -1;
-
-
-    public Fragment fragmentSlected = null;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         ViewPager mViewPager = (ViewPager) findViewById(R.id.viewPager);
         setSupportActionBar(mToolbar);
 
-        allPath = getImagesPath();
+        getImagesPath();
 
         setupViewPager(mViewPager);
         mTabLayout.setupWithViewPager(mViewPager);
@@ -143,8 +116,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public ArrayList<ImagePath> getImagesPath() {
-        al_images.clear();
+    public ArrayList<Album> getImagesPath() {
+        all_images_path.clear();
 
         int int_position = 0;
         Uri uri;
@@ -164,8 +137,8 @@ public class MainActivity extends AppCompatActivity {
         while (cursor.moveToNext()) {
             absolutePathOfImage = cursor.getString(column_index_data);
 
-            for (int i = 0; i < al_images.size(); i++) {
-                if (al_images.get(i).getFolder().equals(cursor.getString(column_index_folder_name))) {
+            for (int i = 0; i < all_images_path.size(); i++) {
+                if (all_images_path.get(i).getFolder().equals(cursor.getString(column_index_folder_name))) {
                     boolean_folder = true;
                     int_position = i;
                     break;
@@ -177,27 +150,26 @@ public class MainActivity extends AppCompatActivity {
             if (boolean_folder) {
 
                 ArrayList<String> al_path = new ArrayList<>();
-                al_path.addAll(al_images.get(int_position).getAllImagePath());
+                al_path.addAll(all_images_path.get(int_position).getAllImagePath());
                 al_path.add(absolutePathOfImage);
-                al_images.get(int_position).setAllImagePath(al_path);
+                all_images_path.get(int_position).setAllImagePath(al_path);
 
             } else {
                 ArrayList<String> al_path = new ArrayList<>();
                 al_path.add(absolutePathOfImage);
-                ImagePath obj_model = new ImagePath();
+                Album obj_model = new Album();
                 obj_model.setFolder(cursor.getString(column_index_folder_name));
                 obj_model.setAllImagePath(al_path);
-                al_images.add(obj_model);
+                all_images_path.add(obj_model);
             }
         }
-        return al_images;
+        return all_images_path;
     }
 
     public Fragment openGallery() {
         Fragment fragment = new GalleryFragment();
         Bundle bGallery = new Bundle();
-        bGallery.putSerializable(ARRAY_PATH, al_images);
-        bGallery.putInt("position", position);
+        bGallery.putSerializable(ARRAY_PATH, all_images_path);
         fragment.setArguments(bGallery);
         return fragment;
     }
@@ -205,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
     public Fragment openAlbum() {
         Fragment fragment = new AlbumFragment();
         Bundle bAlbum = new Bundle();
-        bAlbum.putSerializable(ARRAY_PATH, al_images);
+        bAlbum.putSerializable(ARRAY_PATH, all_images_path);
         fragment.setArguments(bAlbum);
         return fragment;
     }

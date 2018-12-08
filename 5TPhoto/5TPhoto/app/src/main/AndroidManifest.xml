@@ -43,6 +43,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.fiveti.a5tphoto.Activity.MainActivity" />
         </activity>
+        <activity android:name=".Activity.GalleryActivity"
+            android:parentActivityName=".Activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.fiveti.a5tphoto.Activity.MainActivity" />
+        </activity>
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"

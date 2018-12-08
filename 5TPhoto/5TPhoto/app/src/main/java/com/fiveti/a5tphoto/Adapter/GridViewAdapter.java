@@ -6,28 +6,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.fiveti.a5tphoto.Fragment.SquareImageView;
-import com.fiveti.a5tphoto.ImagePath;
+import com.fiveti.a5tphoto.Album;
 import com.fiveti.a5tphoto.R;
 
 import java.util.ArrayList;
 
-public class GridViewAdapter extends ArrayAdapter<ImagePath> {
+public class GridViewAdapter extends ArrayAdapter<Album> {
 
     Context context;
     ViewHolder viewHolder;
-    ArrayList<ImagePath> allPath = new ArrayList<>();
+    ArrayList<Album> all_images_path = new ArrayList<>();
     int int_position;
 
 
-    public GridViewAdapter(Context context, ArrayList<ImagePath> al_menu,int int_position) {
-        super(context, R.layout.grid_image_layout, al_menu);
-        this.allPath = al_menu;
+    public GridViewAdapter(Context context, ArrayList<Album> allPath, int int_position) {
+        super(context, R.layout.grid_image_layout, allPath);
+        this.all_images_path = allPath;
         this.context = context;
         this.int_position = int_position;
 
@@ -37,8 +36,8 @@ public class GridViewAdapter extends ArrayAdapter<ImagePath> {
     @Override
     public int getCount() {
 
-        Log.e("ADAPTER LIST SIZE", allPath.get(int_position).getAllImagePath().size() + "");
-        return allPath.get(int_position).getAllImagePath().size();
+        Log.e("ADAPTER LIST SIZE", all_images_path.get(int_position).getAllImagePath().size() + "");
+        return all_images_path.get(int_position).getAllImagePath().size();
     }
 
     @Override
@@ -48,8 +47,8 @@ public class GridViewAdapter extends ArrayAdapter<ImagePath> {
 
     @Override
     public int getViewTypeCount() {
-        if (allPath.get(int_position).getAllImagePath().size() > 0) {
-            return allPath.get(int_position).getAllImagePath().size();
+        if (all_images_path.get(int_position).getAllImagePath().size() > 0) {
+            return all_images_path.get(int_position).getAllImagePath().size();
         } else {
             return 1;
         }
@@ -83,7 +82,7 @@ public class GridViewAdapter extends ArrayAdapter<ImagePath> {
 
 
 
-        Glide.with(context).load("file://" + allPath.get(int_position).getAllImagePath().get(position))
+        Glide.with(context).load("file://" + all_images_path.get(int_position).getAllImagePath().get(position))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(viewHolder.imageAlbum);

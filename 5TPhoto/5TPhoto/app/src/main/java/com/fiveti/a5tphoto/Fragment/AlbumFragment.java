@@ -1,5 +1,6 @@
 package com.fiveti.a5tphoto.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,8 +11,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.fiveti.a5tphoto.Activity.GalleryActivity;
 import com.fiveti.a5tphoto.Adapter.AlbumAdapter;
-import com.fiveti.a5tphoto.ImagePath;
+import com.fiveti.a5tphoto.Album;
 import com.fiveti.a5tphoto.R;
 
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ public class AlbumFragment extends Fragment {
     AlbumAdapter adapter;
     GridView gvAlbum;
 
-    public static ArrayList<ImagePath> allPath = new ArrayList<>();
+    public static ArrayList<Album> all_images_path = new ArrayList<>();
     private String ARRAY_PATH = "array_path";
 
     @Nullable
@@ -32,29 +34,30 @@ public class AlbumFragment extends Fragment {
         gvAlbum = (GridView)v.findViewById(R.id.gridViewAlbum);
 
         Bundle bAlbum = getArguments();
-        allPath = (ArrayList<ImagePath>)bAlbum.getSerializable(ARRAY_PATH);
+        all_images_path = (ArrayList<Album>)bAlbum.getSerializable(ARRAY_PATH);
 
-        adapter = new AlbumAdapter(v.getContext(),allPath);
+        adapter = new AlbumAdapter(v.getContext(), all_images_path);
         gvAlbum.setAdapter(adapter);
 
         gvAlbum.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                GalleryFragment galleryFragment = new GalleryFragment();
+                Intent iAlbum = new Intent(getActivity(), GalleryActivity.class);
+                //Gửi vị trí ảnh hiện tại và cả mảng file
                 Bundle bGallery = new Bundle();
-                bGallery.putSerializable(ARRAY_PATH, allPath);
-                bGallery.putInt("position", i);
-                galleryFragment.setArguments(bGallery);
-                getFragmentManager().beginTransaction().replace(R.id.fragment_container, galleryFragment).addToBackStack("gallery").commit();
+                bGallery.putSerializable(ARRAY_PATH, all_images_path);
+                bGallery.putInt("posAlbum", i);
+                iAlbum.putExtras(bGallery);
+                startActivity(iAlbum);
             }
         });
 
         return v;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setHasOptionsMenu(true);
+//    }
 }

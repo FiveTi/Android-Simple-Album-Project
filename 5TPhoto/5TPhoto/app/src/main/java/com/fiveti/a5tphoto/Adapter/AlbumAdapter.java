@@ -6,27 +6,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.fiveti.a5tphoto.Fragment.SquareImageView;
-import com.fiveti.a5tphoto.ImagePath;
+import com.fiveti.a5tphoto.Album;
 import com.fiveti.a5tphoto.R;
 
 import java.util.ArrayList;
 
-public class AlbumAdapter extends ArrayAdapter<ImagePath> {
+public class AlbumAdapter extends ArrayAdapter<Album> {
 
     Context context;
     ViewHolder viewHolder;
-    ArrayList<ImagePath> allPath = new ArrayList<>();
+    ArrayList<Album> all_images_path = new ArrayList<>();
 
 
-    public AlbumAdapter(Context context, ArrayList<ImagePath> al_menu) {
+    public AlbumAdapter(Context context, ArrayList<Album> al_menu) {
         super(context, R.layout.grid_image_layout, al_menu);
-        this.allPath = al_menu;
+        this.all_images_path = al_menu;
         this.context = context;
 
 
@@ -35,8 +34,8 @@ public class AlbumAdapter extends ArrayAdapter<ImagePath> {
     @Override
     public int getCount() {
 
-        Log.e("ADAPTER LIST SIZE", allPath.size() + "");
-        return allPath.size();
+        Log.e("ADAPTER LIST SIZE", all_images_path.size() + "");
+        return all_images_path.size();
     }
 
     @Override
@@ -46,8 +45,8 @@ public class AlbumAdapter extends ArrayAdapter<ImagePath> {
 
     @Override
     public int getViewTypeCount() {
-        if (allPath.size() > 0) {
-            return allPath.size();
+        if (all_images_path.size() > 0) {
+            return all_images_path.size();
         } else {
             return 1;
         }
@@ -76,12 +75,12 @@ public class AlbumAdapter extends ArrayAdapter<ImagePath> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.folder.setText(allPath.get(position).getFolder());
-        viewHolder.number.setText(allPath.get(position).getAllImagePath().size()+"");
+        viewHolder.folder.setText(all_images_path.get(position).getFolder());
+        viewHolder.number.setText(all_images_path.get(position).getAllImagePath().size()+"");
 
 
 
-        Glide.with(context).load("file://" + allPath.get(position).getAllImagePath().get(0))
+        Glide.with(context).load("file://" + all_images_path.get(position).getAllImagePath().get(0))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(viewHolder.imageAlbum);

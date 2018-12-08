@@ -2,32 +2,26 @@ package com.fiveti.a5tphoto.Activity;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.TabLayout;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.fiveti.a5tphoto.ImagePath;
+import com.fiveti.a5tphoto.Album;
 import com.fiveti.a5tphoto.R;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class FullscreenActivity extends AppCompatActivity {
-    public static ArrayList<ImagePath> allPath = new ArrayList<>();
+    public static ArrayList<Album> allPath = new ArrayList<>();
     private String ARRAY_PATH = "array_path";
     int posImage;
     int position;
@@ -60,7 +54,7 @@ public class FullscreenActivity extends AppCompatActivity {
         fullImageNav = findViewById(R.id.nav_bottom);
 
         Bundle bFullImage = this.getIntent().getExtras();
-        allPath = (ArrayList<ImagePath>) bFullImage.getSerializable(ARRAY_PATH);
+        allPath = (ArrayList<Album>) bFullImage.getSerializable(ARRAY_PATH);
         position = bFullImage.getInt("posAlbum");
         posImage = bFullImage.getInt("posImage");
 
