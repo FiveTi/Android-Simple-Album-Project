@@ -37,18 +37,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.fiveti.a5tphoto.Activity.MainActivity" />
         </activity>
-        <activity android:name=".Activity.FullscreenActivity"
-            android:parentActivityName=".Activity.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.fiveti.a5tphoto.Activity.MainActivity" />
+        <activity android:name=".Activity.FullscreenImageActivity"
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/AppThemeNoActionBar">
         </activity>
         <activity android:name=".Activity.GalleryActivity"
-            android:parentActivityName=".Activity.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.fiveti.a5tphoto.Activity.MainActivity" />
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
         </activity>
+
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"

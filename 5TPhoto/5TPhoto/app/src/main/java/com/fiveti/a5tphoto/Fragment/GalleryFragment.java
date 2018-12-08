@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.fiveti.a5tphoto.Activity.FullscreenActivity;
+import com.fiveti.a5tphoto.Activity.FullscreenImageActivity;
 import com.fiveti.a5tphoto.Adapter.GridViewAdapter;
 import com.fiveti.a5tphoto.Album;
 import com.fiveti.a5tphoto.R;
@@ -68,7 +68,7 @@ public class GalleryFragment extends Fragment {
         gvAlbum.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-                Intent iFullImage = new Intent(getActivity(), FullscreenActivity.class);
+                Intent iFullImage = new Intent(getActivity(), FullscreenImageActivity.class);
                 //Gửi vị trí ảnh hiện tại và cả mảng file
                 Bundle bFullImage = new Bundle();
                 bFullImage.putSerializable(ARRAY_PATH, allPathGalery);

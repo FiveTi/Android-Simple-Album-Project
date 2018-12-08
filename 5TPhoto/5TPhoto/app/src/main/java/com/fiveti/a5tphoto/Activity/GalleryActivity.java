@@ -2,7 +2,10 @@ package com.fiveti.a5tphoto.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+//import android.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -18,8 +21,9 @@ public class GalleryActivity extends AppCompatActivity {
     GridViewAdapter adapter;
 
     private String ARRAY_PATH = "array_path";
-    public static ArrayList<Album> all_images_path = new ArrayList<>();
+    private ArrayList<Album> all_images_path = new ArrayList<>();
     int posAlbum;
+    ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +45,29 @@ public class GalleryActivity extends AppCompatActivity {
                 showAlbum(i);
             }
         });
+
+        actionBar = getSupportActionBar();
+        if( actionBar != null){
+            actionBar.setTitle(all_images_path.get(posAlbum).getFolder());
+            actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //Nếu click vào nút back
+        if(item.getItemId() == android.R.id.home){
+            finish();
+            return true;
+        }
+        return false;
+    }
+
     public void showAlbum(int posImage)
     {
-        Intent iFullImage = new Intent(this, FullscreenActivity.class);
+        Intent iFullImage = new Intent(this, FullscreenImageActivity.class);
         Bundle bFullImage = new Bundle();
         bFullImage.putSerializable(ARRAY_PATH, all_images_path);
         bFullImage.putInt("posAlbum", posAlbum);
