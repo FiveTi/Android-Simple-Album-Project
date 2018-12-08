@@ -1,5 +1,6 @@
 package com.fiveti.a5tphoto.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.fiveti.a5tphoto.Activity.FullscreenActivity;
 import com.fiveti.a5tphoto.Adapter.GridViewAdapter;
 import com.fiveti.a5tphoto.ImagePath;
 import com.fiveti.a5tphoto.R;
@@ -71,23 +73,22 @@ public class GalleryFragment extends Fragment {
                         }
                     }
                 }
-                FullImageFragment fullImageFragment = new FullImageFragment();
+
+                Intent iFullImage = new Intent(getActivity(), FullscreenActivity.class);
+                //Gửi vị trí ảnh hiện tại, tên ảnh và cả mảng file
                 Bundle bFullImage = new Bundle();
                 bFullImage.putSerializable(ARRAY_PATH, allPath);
-                bFullImage.putInt("position", position);
+                bFullImage.putInt("posAlbum", position);
                 bFullImage.putInt("posImage", i);
-                fullImageFragment.setArguments(bFullImage);
-                getFragmentManager().beginTransaction().replace(R.id.fragment_container, fullImageFragment).addToBackStack("fullImage").commit();
+                iFullImage.putExtras(bFullImage);
+                startActivity(iFullImage);
+
             }
         });
 
         return v;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
 
 }
+

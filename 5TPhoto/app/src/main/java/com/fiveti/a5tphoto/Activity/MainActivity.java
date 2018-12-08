@@ -1,5 +1,6 @@
-package com.fiveti.a5tphoto;
+package com.fiveti.a5tphoto.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -14,6 +15,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,7 +27,9 @@ import android.widget.TextView;
 
 import com.fiveti.a5tphoto.Fragment.AlbumFragment;
 import com.fiveti.a5tphoto.Fragment.GalleryFragment;
+import com.fiveti.a5tphoto.ImagePath;
 import com.fiveti.a5tphoto.OpenCamera.openCamera;
+import com.fiveti.a5tphoto.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +37,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<ImagePath> al_images = new ArrayList<>();
-    public static ArrayList<ImagePath> all_path = new ArrayList<>();
     boolean boolean_folder;
 
     private static final int REQUEST_PERMISSIONS = 100;
@@ -41,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     int position = -1;
 
     public Fragment fragmentSlected = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         setupViewPager(mViewPager);
         mTabLayout.setupWithViewPager(mViewPager);
-        all_path = getImagesPath();
+        getImagesPath();
 
     }
 
