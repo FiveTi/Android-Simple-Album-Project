@@ -11,20 +11,20 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.fiveti.a5tphoto.ImagePath;
+import com.fiveti.a5tphoto.Album;
 import com.fiveti.a5tphoto.R;
 
 import java.util.ArrayList;
 
-public class GridViewAdapter extends ArrayAdapter<ImagePath> {
+public class GridViewAdapter extends ArrayAdapter<Album> {
 
     Context context;
     ViewHolder viewHolder;
-    ArrayList<ImagePath> allPath = new ArrayList<>();
+    ArrayList<Album> allPath = new ArrayList<>();
     int int_position;
 
 
-    public GridViewAdapter(Context context, ArrayList<ImagePath> al_menu,int int_position) {
+    public GridViewAdapter(Context context, ArrayList<Album> al_menu, int int_position) {
         super(context, R.layout.grid_image_layout, al_menu);
         this.allPath = al_menu;
         this.context = context;

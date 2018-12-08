@@ -13,7 +13,7 @@ import android.widget.GridView;
 
 import com.fiveti.a5tphoto.Activity.FullscreenActivity;
 import com.fiveti.a5tphoto.Adapter.GridViewAdapter;
-import com.fiveti.a5tphoto.ImagePath;
+import com.fiveti.a5tphoto.Album;
 import com.fiveti.a5tphoto.R;
 
 import java.util.ArrayList;
@@ -23,8 +23,8 @@ public class GalleryFragment extends Fragment {
     GridViewAdapter adapter;
 
     private String ARRAY_PATH = "array_path";
-    public static ArrayList<ImagePath> allPath = new ArrayList<>();
-    public static ArrayList<ImagePath> allPathGalery = new ArrayList<>();
+    public static ArrayList<Album> allPath = new ArrayList<>();
+    public static ArrayList<Album> allPathGalery = new ArrayList<>();
     int position;
 
     @Nullable
@@ -35,7 +35,7 @@ public class GalleryFragment extends Fragment {
         gvAlbum = (GridView) v.findViewById(R.id.gridViewGallery);
 
         Bundle bGallery = getArguments();
-        allPath = (ArrayList<ImagePath>) bGallery.getSerializable(ARRAY_PATH);
+        allPath = (ArrayList<Album>) bGallery.getSerializable(ARRAY_PATH);
         position = bGallery.getInt("position");
         if (position == -1) {
 
@@ -47,8 +47,8 @@ public class GalleryFragment extends Fragment {
                 }
             }
 
-            ImagePath obj = new ImagePath();
-            obj.setFolder(allPath.get(0).getFolder());
+            Album obj = new Album();
+            obj.setAlbumName(allPath.get(0).getAlbumName());
             obj.setAllImagePath(allImagePath);
 
             allPathGalery.add(obj);

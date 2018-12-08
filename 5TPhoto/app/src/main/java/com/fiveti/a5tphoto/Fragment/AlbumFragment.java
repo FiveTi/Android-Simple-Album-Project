@@ -11,7 +11,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.fiveti.a5tphoto.Adapter.AlbumAdapter;
-import com.fiveti.a5tphoto.ImagePath;
+import com.fiveti.a5tphoto.Album;
 import com.fiveti.a5tphoto.R;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class AlbumFragment extends Fragment {
     AlbumAdapter adapter;
     GridView gvAlbum;
 
-    public static ArrayList<ImagePath> allPath = new ArrayList<>();
+    public static ArrayList<Album> allPath = new ArrayList<>();
     private String ARRAY_PATH = "array_path";
 
     @Nullable
@@ -32,7 +32,7 @@ public class AlbumFragment extends Fragment {
         gvAlbum = (GridView)v.findViewById(R.id.gridViewAlbum);
 
         Bundle bAlbum = getArguments();
-        allPath = (ArrayList<ImagePath>)bAlbum.getSerializable(ARRAY_PATH);
+        allPath = (ArrayList<Album>)bAlbum.getSerializable(ARRAY_PATH);
 
         adapter = new AlbumAdapter(v.getContext(),allPath);
         gvAlbum.setAdapter(adapter);

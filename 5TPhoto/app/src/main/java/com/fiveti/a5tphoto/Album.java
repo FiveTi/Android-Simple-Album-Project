@@ -3,17 +3,17 @@ package com.fiveti.a5tphoto;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ImagePath implements Serializable {
+public class Album implements Serializable {
 
-    String folder;
+    String albumName;
     ArrayList<String> allImagePath;
 
-    public String getFolder() {
-        return folder;
+    public String getAlbumName() {
+        return albumName;
     }
 
-    public void setFolder(String folder) {
-        this.folder = folder;
+    public void setAlbumName(String albumName) {
+        this.albumName = albumName;
     }
 
     public ArrayList<String> getAllImagePath() {

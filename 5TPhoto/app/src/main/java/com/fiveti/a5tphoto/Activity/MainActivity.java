@@ -1,12 +1,10 @@
 package com.fiveti.a5tphoto.Activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -15,7 +13,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,7 +24,7 @@ import android.widget.TextView;
 
 import com.fiveti.a5tphoto.Fragment.AlbumFragment;
 import com.fiveti.a5tphoto.Fragment.GalleryFragment;
-import com.fiveti.a5tphoto.ImagePath;
+import com.fiveti.a5tphoto.Album;
 import com.fiveti.a5tphoto.OpenCamera.openCamera;
 import com.fiveti.a5tphoto.R;
 
@@ -36,14 +33,12 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static ArrayList<ImagePath> al_images = new ArrayList<>();
+    public static ArrayList<Album> all_images = new ArrayList<>();
     boolean boolean_folder;
 
     private static final int REQUEST_PERMISSIONS = 100;
     private String ARRAY_PATH = "array_path";
     int position = -1;
-
-    public Fragment fragmentSlected = null;
 
 
     @Override
@@ -159,8 +154,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public ArrayList<ImagePath> getImagesPath() {
-        al_images.clear();
+    public ArrayList<Album> getImagesPath() {
+        all_images.clear();
 
         int int_position = 0;
         Uri uri;
@@ -180,8 +175,8 @@ public class MainActivity extends AppCompatActivity {
         while (cursor.moveToNext()) {
             absolutePathOfImage = cursor.getString(column_index_data);
 
-            for (int i = 0; i < al_images.size(); i++) {
-                if (al_images.get(i).getFolder().equals(cursor.getString(column_index_folder_name))) {
+            for (int i = 0; i < all_images.size(); i++) {
+                if (all_images.get(i).getAlbumName().equals(cursor.getString(column_index_folder_name))) {
                     boolean_folder = true;
                     int_position = i;
                     break;
@@ -194,31 +189,31 @@ public class MainActivity extends AppCompatActivity {
             if (boolean_folder) {
 
                 ArrayList<String> al_path = new ArrayList<>();
-                al_path.addAll(al_images.get(int_position).getAllImagePath());
+                al_path.addAll(all_images.get(int_position).getAllImagePath());
                 al_path.add(absolutePathOfImage);
-                al_images.get(int_position).setAllImagePath(al_path);
+                all_images.get(int_position).setAllImagePath(al_path);
 
             } else {
                 ArrayList<String> al_path = new ArrayList<>();
                 al_path.add(absolutePathOfImage);
-                ImagePath obj_model = new ImagePath();
-                obj_model.setFolder(cursor.getString(column_index_folder_name));
+                Album obj_model = new Album();
+                obj_model.setAlbumName(cursor.getString(column_index_folder_name));
                 obj_model.setAllImagePath(al_path);
 
-                al_images.add(obj_model);
+                all_images.add(obj_model);
 
 
             }
 
 
         }
-        return al_images;
+        return all_images;
     }
 
     public Fragment openGallery() {
         Fragment fragment = new GalleryFragment();
         Bundle bGallery = new Bundle();
-        bGallery.putSerializable(ARRAY_PATH, al_images);
+        bGallery.putSerializable(ARRAY_PATH, all_images);
         bGallery.putInt("position", position);
         fragment.setArguments(bGallery);
         return fragment;
@@ -228,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
     public Fragment openAlbum() {
         Fragment fragment = new AlbumFragment();
         Bundle  bAlbum = new Bundle();
-        bAlbum.putSerializable(ARRAY_PATH, al_images);
+        bAlbum.putSerializable(ARRAY_PATH, all_images);
         fragment.setArguments(bAlbum);
         return fragment;
     }

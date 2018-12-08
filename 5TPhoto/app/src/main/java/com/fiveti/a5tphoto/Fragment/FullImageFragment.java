@@ -11,13 +11,13 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.fiveti.a5tphoto.ImagePath;
+import com.fiveti.a5tphoto.Album;
 import com.fiveti.a5tphoto.R;
 
 import java.util.ArrayList;
 
 public class FullImageFragment extends Fragment {
-    public static ArrayList<ImagePath> allPath = new ArrayList<>();
+    public static ArrayList<Album> allPath = new ArrayList<>();
     private String ARRAY_PATH = "array_path";
     int posImage;
     int position;
@@ -31,7 +31,7 @@ public class FullImageFragment extends Fragment {
         fullImage = (ImageView)v.findViewById(R.id.fullImage);
 
         Bundle bFullImage = getArguments();
-        allPath = (ArrayList<ImagePath>)bFullImage.getSerializable(ARRAY_PATH);
+        allPath = (ArrayList<Album>)bFullImage.getSerializable(ARRAY_PATH);
         position = bFullImage.getInt("position");
         posImage = bFullImage.getInt("posImage");
 
