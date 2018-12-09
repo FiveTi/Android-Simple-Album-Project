@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.fiveti.a5tphoto.Activity.FirstActivity;
+import com.fiveti.a5tphoto.Activity.MainActivity;
 import com.fiveti.a5tphoto.R;
 
 public class CreatePassActivity extends AppCompatActivity {
@@ -38,7 +39,7 @@ public class CreatePassActivity extends AppCompatActivity {
                         editor.apply();
 
                         //truy cập vào app
-                        Intent intent = new Intent(getApplicationContext(),FirstActivity.class);
+                        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                         startActivity(intent);
                         finish();
                     }

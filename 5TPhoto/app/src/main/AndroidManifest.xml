@@ -22,14 +22,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ProtectApp.ReviewActivity">
+        </activity>
+
+        <activity android:name=".Activity.FirstActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".Activity.FirstActivity"></activity>
         <activity android:name=".ProtectApp.CreatePassActivity"></activity>
         <activity android:name=".ProtectApp.ConfirmPassActivity"></activity>
         <activity

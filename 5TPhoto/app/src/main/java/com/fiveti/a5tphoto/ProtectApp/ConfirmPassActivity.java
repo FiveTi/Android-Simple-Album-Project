@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.fiveti.a5tphoto.Activity.FirstActivity;
+import com.fiveti.a5tphoto.Activity.MainActivity;
 import com.fiveti.a5tphoto.R;
 
 public class ConfirmPassActivity extends AppCompatActivity {
@@ -33,7 +34,7 @@ public class ConfirmPassActivity extends AppCompatActivity {
                 String txtPass = edtConf.getText().toString();
                 if(txtPass.equals(pass)){
                     //truy cấp vào app
-                    Intent intent = new Intent(getApplicationContext(),FirstActivity.class);
+                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                     startActivity(intent);
                     finish();
                 }

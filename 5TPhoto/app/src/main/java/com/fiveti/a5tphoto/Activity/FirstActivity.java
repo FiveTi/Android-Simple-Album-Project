@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 
+import com.fiveti.a5tphoto.ProtectApp.ReviewActivity;
 import com.fiveti.a5tphoto.R;
 
 public class FirstActivity extends AppCompatActivity {
@@ -22,7 +23,7 @@ public class FirstActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_first);
+        setContentView(R.layout.activity_review);
         //Nếu chưa được cấp quyền
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (getApplicationContext().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -77,7 +78,7 @@ public class FirstActivity extends AppCompatActivity {
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
 
-            startActivity(new Intent(FirstActivity.this, MainActivity.class));
+            startActivity(new Intent(FirstActivity.this, ReviewActivity.class));
 
             finish();
         }
