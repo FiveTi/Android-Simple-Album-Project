@@ -11,6 +11,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.fiveti.a5tphoto.Adapter.FullscreenImageAdapter;
@@ -24,26 +26,32 @@ import java.util.Objects;
 public class FullscreenImageActivity extends AppCompatActivity {
     public static ArrayList<Album> allPath = new ArrayList<>();
     private String ARRAY_PATH = "array_path";
+
     int posImage;
     int posAlbum;
     PhotoView fullImage;
     Toolbar toolbar;
-    static int hide = 0;
+   // public static int hide = 0;
     BottomNavigationView fullImageNav;
     View hideView;
 
     private ViewPager viewPager;
-    FullscreenImageAdapter fullScreenImageAdapter;
+    private FullscreenImageAdapter fullScreenImageAdapter;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_fullscreen_image_viewpager);
 
         hideView = getWindow().getDecorView();
 
         viewPager = findViewById(R.id.viewpager);
+        fullImageNav = findViewById(R.id.nav_bottom);
 
         //Khởi tạo toolbar
         toolbar = findViewById(R.id.nav_actionBar);
@@ -58,12 +66,9 @@ public class FullscreenImageActivity extends AppCompatActivity {
             }
         });
 
-
         //Ẩn toàn bộ thanh thông báo, thanh điều hướng chỉ hiện lên khi được vuốt lên)
         hideView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         //Khởi tạo bottom navigation bar
         fullImageNav = findViewById(R.id.nav_bottom);
@@ -81,7 +86,7 @@ public class FullscreenImageActivity extends AppCompatActivity {
        // ArrayList<Album> images = new ArrayList<>();
        // images.addAll(allPath);
 
-        fullScreenImageAdapter = new FullscreenImageAdapter(this, allPath, posAlbum, posImage);
+        fullScreenImageAdapter = new FullscreenImageAdapter(this, allPath, posAlbum);
 
         viewPager.setAdapter(fullScreenImageAdapter);
         viewPager.addOnPageChangeListener(viewPagerOnPageChangeListener);
@@ -101,8 +106,6 @@ public class FullscreenImageActivity extends AppCompatActivity {
         public void onPageSelected(int position) {
             if (viewPager != null) {
                 viewPager.setCurrentItem(position);
-
-                //setActionBarTitle(posAlbum);
             }
         }
 
@@ -139,14 +142,21 @@ public class FullscreenImageActivity extends AppCompatActivity {
                 break;
         }
 
-
         return true;
     }
 
-//    @Override
-//    public boolean onSupportNavigateUp() {
-//        Toast.makeText(this,"HIHI", Toast.LENGTH_SHORT).show();
-//        onBackPressed();
-//        return true;
-//    }
+    //Vào chế độ ẩn toàn màn hình
+    public void EnterFullScreenView() {
+        getSupportActionBar().hide();
+        fullImageNav.setVisibility(View.GONE);
+        hideView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+    }
+
+    //Thoát chế độ ẩn toàn màn hình
+    public void LeaveFullScreenView() {
+        fullImageNav.setVisibility(View.VISIBLE);
+        getSupportActionBar().show();
+    }
+
 }
