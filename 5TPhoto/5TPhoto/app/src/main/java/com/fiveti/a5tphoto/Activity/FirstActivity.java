@@ -66,7 +66,7 @@ public class FirstActivity extends AppCompatActivity {
         @Override
         protected Object doInBackground(Object[] params) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(0);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
