@@ -44,12 +44,13 @@ public class FullscreenImageActivity extends AppCompatActivity {
     // public static int hide = 0;
     BottomNavigationView fullImageNav;
     View hideView;
+    //Đường dẫn của ảnh hiện tại
     String curPath = "";
     private ViewPager viewPager;
     private FullscreenImageAdapter fullScreenImageAdapter;
 
 
-    SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy HH:mm");
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM dd, yyyy HH:mm");
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -66,11 +67,13 @@ public class FullscreenImageActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewpager);
         fullImageNav = findViewById(R.id.nav_bottom);
 
+        //Khởi tạo context
         context = FullscreenImageActivity.this;
+
         //Khởi tạo toolbar
         toolbar = findViewById(R.id.nav_actionBar);
         setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("FullScreenImageActivity");
+        Objects.requireNonNull(getSupportActionBar());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -92,7 +95,7 @@ public class FullscreenImageActivity extends AppCompatActivity {
         allPath = (ArrayList<Album>) bFullImage.getSerializable(ARRAY_PATH);
         posAlbum = bFullImage.getInt("posAlbum");
         posImage = bFullImage.getInt("posImage");
-        curPath = "file://" + allPath.get(posAlbum).getAllImagePath().get(posImage);
+        curPath = allPath.get(posAlbum).getAllImagePath().get(posImage);
         setupViewPager();
     }
 
@@ -143,29 +146,53 @@ public class FullscreenImageActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         switch (id) {
             case R.id.action_info:
+                try {
+                    ExifInterface exifInterface = new ExifInterface(curPath);
+                    String info = "";
+                    String attribute = "";
+                    attribute = getImageInfo(exifInterface);
+                    File file = new File(curPath);
 
+                    final DecimalFormat decimalFormat = new DecimalFormat("#.##");
+                    final double size = file.length();    // Lấy độ dài file
+                    String temp = "";
 
-                // -----  Tạo dialog để xuất ra detail -----
+                    if (size > 1024 * 1024) {
+                        temp = decimalFormat.format(size / (1024 * 1024)) + " MB";
+                    } else {
+                        if (size > 1024) {
+                            temp = decimalFormat.format(size / 1024) + " KB";
+                        } else {
+                            temp = decimalFormat.format(size) + " B";
+                        }
+                    }
 
-                TextView title = new TextView(getApplicationContext());
-                title.setPadding(46, 40, 0, 0);
-                title.setText("Image infomation");
-                title.setTextSize(23.0f);
-                title.setTypeface(null, Typeface.BOLD);
-                AlertDialog dialog;
-                dialog = new AlertDialog.Builder(context, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert).create();
+                    info = simpleDateFormat.format(file.lastModified())
+                            + "\n\n" +curPath + "\n"
+                            + temp + "    "
+                            + attribute;
 
+                    //Show dialog image info
+                    TextView title = new TextView(getApplicationContext());
+                    title.setPadding(30, 30, 30, 0);
+                    title.setTextSize(25);
+                    title.setTypeface(null, Typeface.BOLD);
+                    title.setText("Image infomation");
 
-                dialog.setCustomTitle(title);
-                dialog.setMessage("TTTTT");
-                dialog.setButton(AlertDialog.BUTTON_POSITIVE, "Close",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                dialog.show();
-
+                    AlertDialog dialog;
+                    dialog = new AlertDialog.Builder(context, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert).create();
+                    dialog.setCustomTitle(title);
+                    dialog.setMessage(info);
+                    dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Close",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    dialog.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 return true;
 
             case R.id.action_slideShow:
@@ -180,51 +207,50 @@ public class FullscreenImageActivity extends AppCompatActivity {
         return true;
     }
 
-    private String showInfo(ExifInterface exif) {
-        String myAttribute = "";
+    private String getImageInfo(ExifInterface exifInterface) {
+        String imgAttribute = "";
 
-        if (exif.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, 0) == 0) {
-            return myAttribute;
+        //Lấy ra độ phân giải của ảnh
+        if (exifInterface.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, 0) == 0) {
+            return imgAttribute;
         } else {
-            myAttribute += "\n\nResolution: " + exif.getAttribute(ExifInterface.TAG_IMAGE_WIDTH) +
-                    "x" + exif.getAttribute(ExifInterface.TAG_IMAGE_LENGTH);
-
-            if (exif.getAttribute(ExifInterface.TAG_MODEL) == null) {
-                return myAttribute;
+            imgAttribute += exifInterface.getAttribute(ExifInterface.TAG_IMAGE_WIDTH) +
+                    "x" + exifInterface.getAttribute(ExifInterface.TAG_IMAGE_LENGTH);
+            if (exifInterface.getAttribute(ExifInterface.TAG_MODEL) == null) {
+                return imgAttribute;
             }
         }
 
-        // Lấy aperture
-        final DecimalFormat apertureFormat = new DecimalFormat("#.#"); // Tạo format cho aperture
-        String aperture = exif.getAttribute(ExifInterface.TAG_F_NUMBER);
+        //Lấy ra model của điện thoại
+        imgAttribute += "\n\n" + exifInterface.getAttribute(ExifInterface.TAG_MODEL) + "\n";
+
+        // Lấy ra khẩu độ của ảnh
+        final DecimalFormat apertureFormat = new DecimalFormat("#.#");
+        String aperture = exifInterface.getAttribute(ExifInterface.TAG_F_NUMBER);
         if (aperture != null) {
-            Double aperture_double = Double.parseDouble(aperture);
-            apertureFormat.format(aperture_double);
-            myAttribute += "\n\nAperture: f/" + aperture_double + "\n\n";
+            Float parseFloat = Float.parseFloat(aperture);
+            apertureFormat.format(parseFloat);
+            imgAttribute += "f/" + parseFloat + "    ";
         } else {
-            myAttribute += "\n\nAperture: unknown\n\n";
+            imgAttribute += "    ";
         }
 
-        // Lấy exposure time
-        String ExposureTime = exif.getAttribute(ExifInterface.TAG_EXPOSURE_TIME);
-        Double ExposureTime_double = Double.parseDouble(ExposureTime);
-        Double Denominator = 1 / ExposureTime_double;
+        //Lấy ra tiêu cự ống kính
+        imgAttribute += exifInterface.getAttributeDouble(ExifInterface.TAG_FOCAL_LENGTH, 0) + "mm" + "    ";
 
-        ExposureTime = 1 + "/" + String.format("%.0f", Denominator);
+        //Lấy ra Iso của ảnh
+        imgAttribute += "ISO: " + exifInterface.getAttribute(ExifInterface.TAG_ISO_SPEED_RATINGS) + "    ";
 
-        myAttribute += "Exposure Time: " + ExposureTime + "s\n\n";
-
-        if (exif.getAttributeInt(ExifInterface.TAG_FLASH, 0) == 0) {
-            myAttribute += "Flash: Off\n\n";
+        //Kiểm tra xem có bật flash hay không
+        if (exifInterface.getAttributeInt(ExifInterface.TAG_FLASH, 0) == 0) {
+            imgAttribute += "flash: off";
         } else {
-            myAttribute += "Flash: On\n\n";
+            imgAttribute += "flash: on";
         }
-        myAttribute += "Focal Length: " + exif.getAttributeDouble(ExifInterface.TAG_FOCAL_LENGTH, 0) + "mm\n\n";
-        myAttribute += "ISO Value: " + exif.getAttribute(ExifInterface.TAG_ISO_SPEED_RATINGS) + "\n\n";
-        myAttribute += "Model: " + exif.getAttribute(ExifInterface.TAG_MODEL);
 
-        return myAttribute;
+        return imgAttribute;
     }
+
 
     //Vào chế độ ẩn toàn màn hình
     public void EnterFullScreenView() {

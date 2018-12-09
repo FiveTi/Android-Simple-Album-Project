@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         app:menu="@menu/nav_full_image_bottom"
-        android:background="#66000000"
+        android:background="#66c2bdbd"
         app:itemTextColor="#ffffff"
         app:itemIconTint="#ffffff"
         android:layout_alignParentStart="true"
