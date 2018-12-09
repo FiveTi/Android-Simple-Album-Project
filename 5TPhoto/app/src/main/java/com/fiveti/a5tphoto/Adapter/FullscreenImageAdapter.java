@@ -1,21 +1,17 @@
 package com.fiveti.a5tphoto.Adapter;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.fiveti.a5tphoto.Activity.FullscreenImageActivity;
 import com.fiveti.a5tphoto.Album;
 import com.fiveti.a5tphoto.R;
-import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
-import com.github.chrisbanes.photoview.PhotoViewAttacher;
 
 import java.util.ArrayList;
 
@@ -71,9 +67,9 @@ public class FullscreenImageAdapter extends PagerAdapter {
 //            public void onPhotoTap(ImageView view, float x, float y) {
 //                hideToolbar = (hideToolbar + 1) % 2;
 //                if (hideToolbar == 1) {
-//                    context.EnterFullScreenView();
+//                    context.EnterFullScreen();
 //                } else {
-//                    context.LeaveFullScreenView();
+//                    context.ExitFullScreen();
 //                }
 //            }
 //        });
@@ -84,14 +80,12 @@ public class FullscreenImageAdapter extends PagerAdapter {
             public void onClick(View v) {
                 hideToolbar = (hideToolbar + 1) % 2;
                 if (hideToolbar == 1) {
-                    context.EnterFullScreenView();
+                    context.EnterFullScreen();
                 } else {
-                    context.LeaveFullScreenView();
+                    context.ExitFullScreen();
                }
             }
         });
-
-
 
         container.addView(view);
 

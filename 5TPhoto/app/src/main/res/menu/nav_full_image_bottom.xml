@@ -7,16 +7,15 @@
     <item
         android:id="@+id/nva_share"
         android:icon="@drawable/ic_share"
-        android:title="Share"
-        tools:ignore="HardcodedText" />
+        android:title="Share"/>
     <item
-        android:id="@+id/nav_edit"
-        android:icon="@drawable/ic_edit"
-        android:title="Edit" />
+        android:id="@+id/nav_filter"
+        android:icon="@drawable/ic_filter"
+        android:title="Filter" />
     <item
-        android:id="@+id/nav_share"
-        android:icon="@drawable/ic_edit"
-        android:title="Share" />
+        android:id="@+id/nav_crop"
+        android:icon="@drawable/ic_crop"
+        android:title="Crop" />
     <item
         android:id="@+id/nva_delete"
         android:icon="@drawable/ic_delete"

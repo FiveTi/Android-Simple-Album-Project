@@ -3,6 +3,7 @@ package com.fiveti.a5tphoto.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.media.ExifInterface;
 import android.os.Build;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -153,8 +155,8 @@ public class FullscreenImageActivity extends AppCompatActivity {
                     attribute = getImageInfo(exifInterface);
                     File file = new File(curPath);
 
-                    final DecimalFormat decimalFormat = new DecimalFormat("#.##");
-                    final double size = file.length();    // Lấy độ dài file
+                    DecimalFormat decimalFormat = new DecimalFormat("#.##");
+                    double size = file.length();
                     String temp = "";
 
                     if (size > 1024 * 1024) {
@@ -168,11 +170,11 @@ public class FullscreenImageActivity extends AppCompatActivity {
                     }
 
                     info = simpleDateFormat.format(file.lastModified())
-                            + "\n\n" +curPath + "\n"
+                            + "\n\n" + curPath + "\n"
                             + temp + "    "
                             + attribute;
 
-                    //Show dialog image info
+                    //Show dialog
                     TextView title = new TextView(getApplicationContext());
                     title.setPadding(30, 30, 30, 0);
                     title.setTextSize(25);
@@ -197,11 +199,15 @@ public class FullscreenImageActivity extends AppCompatActivity {
 
             case R.id.action_slideShow:
                 Toast.makeText(this, "Set as", Toast.LENGTH_SHORT).show();
-                break;
+                Intent intentSlideshow = new Intent(context, SlideshowActivity.class);
+                intentSlideshow.putExtra("idImage", posImage); // Lấy position id và truyền cho SlideShowActivity
+                intentSlideshow.putExtra("idAlbum", posAlbum);
+                startActivity(intentSlideshow);
+                return true;
 
             case R.id.action_setAs:
-                Toast.makeText(this, "Set as", Toast.LENGTH_SHORT).show();
-                break;
+
+                return true;
         }
 
         return true;
@@ -253,7 +259,7 @@ public class FullscreenImageActivity extends AppCompatActivity {
 
 
     //Vào chế độ ẩn toàn màn hình
-    public void EnterFullScreenView() {
+    public void EnterFullScreen() {
         getSupportActionBar().hide();
         fullImageNav.setVisibility(View.GONE);
         hideView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
@@ -261,7 +267,7 @@ public class FullscreenImageActivity extends AppCompatActivity {
     }
 
     //Thoát chế độ ẩn toàn màn hình
-    public void LeaveFullScreenView() {
+    public void ExitFullScreen() {
         fullImageNav.setVisibility(View.VISIBLE);
         getSupportActionBar().show();
     }
