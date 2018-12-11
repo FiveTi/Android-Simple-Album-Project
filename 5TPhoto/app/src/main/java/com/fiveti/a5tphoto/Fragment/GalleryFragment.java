@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.fiveti.a5tphoto.Activity.FullscreenImageActivity;
+import com.fiveti.a5tphoto.Activity.MainActivity;
 import com.fiveti.a5tphoto.Adapter.GridViewAdapter;
 import com.fiveti.a5tphoto.Album;
 import com.fiveti.a5tphoto.R;
@@ -82,7 +83,6 @@ public class GalleryFragment extends Fragment {
 
         return v;
     }
-
 
 }
 

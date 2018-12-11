@@ -7,13 +7,6 @@
     tools:ignore="AlwaysShowAction,HardcodedText">
 
     <item
-        android:id="@+id/action_favorite"
-        android:icon="@drawable/ic_delete"
-        android:orderInCategory="140"
-        app:showAsAction="always"
-        android:title="Favorite"/>
-
-    <item
         android:id="@+id/action_setAs"
         android:orderInCategory="200"
         app:showAsAction="never"

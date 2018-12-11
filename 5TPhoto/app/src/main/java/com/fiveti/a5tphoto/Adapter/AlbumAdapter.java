@@ -93,9 +93,5 @@ public class AlbumAdapter extends ArrayAdapter<Album> {
     private static class ViewHolder {
         TextView folder, number;
         SquareImageView imageAlbum;
-
-
     }
-
-
 }

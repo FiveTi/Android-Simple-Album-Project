@@ -96,4 +96,5 @@ public class GridViewAdapter extends ArrayAdapter<Album> {
         TextView folder, number;
         SquareImageView imageAlbum;
     }
+
 }

@@ -1,20 +1,30 @@
 package com.fiveti.a5tphoto.Activity;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.WallpaperManager;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Typeface;
 import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +35,7 @@ import android.widget.Toast;
 
 import com.fiveti.a5tphoto.Adapter.FullscreenImageAdapter;
 import com.fiveti.a5tphoto.Album;
+import com.fiveti.a5tphoto.BuildConfig;
 import com.fiveti.a5tphoto.R;
 import com.github.chrisbanes.photoview.PhotoView;
 
@@ -99,6 +110,73 @@ public class FullscreenImageActivity extends AppCompatActivity {
         posImage = bFullImage.getInt("posImage");
         curPath = allPath.get(posAlbum).getAllImagePath().get(posImage);
         setupViewPager();
+
+
+        //Khởi tạo sự kiện click cho item trong bottom navigation
+        fullImageNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.nva_share:
+                        /*Toast.makeText(FullscreenImageActivity.this, "Chức năng tạm thời chưa hỗ trợ!", Toast.LENGTH_SHORT).show();*/
+                        startActivity(Intent.createChooser(shareIntent(), "Chia sẻ ảnh đang sử dụng"));
+                        break;
+                    case R.id.nav_filter:
+                        Toast.makeText(FullscreenImageActivity.this, "Chức năng tạm thời chưa hỗ trợ!", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.nav_crop:
+                        Toast.makeText(FullscreenImageActivity.this, "Chức năng tạm thời chưa hỗ trợ!", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.nva_delete:
+                        /*Toast.makeText(FullscreenImageActivity.this, "Chức năng tạm thời chưa hỗ trợ!", Toast.LENGTH_SHORT).show();*/
+
+                        final File deleteFile = new File(curPath);
+
+                        // Tạo biến builder thông báo xác nhận việc xóa ảnh
+                        AlertDialog builder;
+                        builder = new AlertDialog.Builder(context, android.R.style.Theme_DeviceDefault_Dialog_Alert).create();
+
+                        builder.setMessage("Xóa ảnh?");
+                        //Nếu nhấn Xóa
+                        builder.setButton(Dialog.BUTTON_POSITIVE, "Xóa", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Nguồn tham khảo: http://stackoverflow.com/a/20780472#1#L0
+                                String[] projection = {MediaStore.Images.Media._ID};
+
+                                String selection = MediaStore.Images.Media.DATA + " = ?";
+                                String[] selectionArgs = new String[]{deleteFile.getAbsolutePath()};
+
+                                Uri queryUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                                ContentResolver contentResolver = getContentResolver();
+                                Cursor c = contentResolver.query(queryUri, projection, selection, selectionArgs, null);
+                                if (c.moveToFirst()) {
+                                    long id = c.getLong(c.getColumnIndexOrThrow(MediaStore.Images.Media._ID));
+                                    Uri deleteUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
+                                    contentResolver.delete(deleteUri, null, null);
+                                    Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(context, "Xóa không thành công", Toast.LENGTH_SHORT).show();
+                                }
+                                c.close();
+                                Toast.makeText(context, "Đã xóa", Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
+                            }
+
+                        });
+
+                        //Nếu Nhấn hủy
+                        builder.setButton(Dialog.BUTTON_NEGATIVE, "Thoát", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        builder.show();
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
     private void setupViewPager() {
@@ -270,6 +348,19 @@ public class FullscreenImageActivity extends AppCompatActivity {
     public void ExitFullScreen() {
         fullImageNav.setVisibility(View.VISIBLE);
         getSupportActionBar().show();
+    }
+
+    public Intent shareIntent() {
+        final Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        final File photoFile = new File(curPath);
+        Uri photoURI = FileProvider.getUriForFile(context,
+                BuildConfig.APPLICATION_ID + ".provider",
+                photoFile);
+        shareIntent.setType("image/jpg");
+        shareIntent.putExtra(Intent.EXTRA_STREAM, photoURI);
+        return shareIntent;
+
+        //Nguồn tham khảo https://stackoverflow.com/questions/50513299/why-this-share-images-not-work-with-all-mobile-devices-only-some
     }
 
 }

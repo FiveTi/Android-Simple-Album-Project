@@ -181,4 +181,11 @@ public class MainActivity extends AppCompatActivity {
         fragment.setArguments(bAlbum);
         return fragment;
     }
+
+/*    @Override
+    protected void onPause() {
+        super.onPause();
+        all_images_path.clear();
+        all_images_path=getImagesPath();
+    }*/
 }
