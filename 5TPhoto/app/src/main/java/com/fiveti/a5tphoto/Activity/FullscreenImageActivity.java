@@ -2,12 +2,15 @@ package com.fiveti.a5tphoto.Activity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.media.ExifInterface;
 import android.net.Uri;
@@ -19,6 +22,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.content.FileProvider;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +31,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.MimeTypeMap;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +40,8 @@ import com.fiveti.a5tphoto.Database.Album;
 import com.fiveti.a5tphoto.BuildConfig;
 import com.fiveti.a5tphoto.R;
 import com.github.chrisbanes.photoview.PhotoView;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,15 +50,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class FullscreenImageActivity extends AppCompatActivity {
+public class FullscreenImageActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener  {
     public static ArrayList<Album> allPath = new ArrayList<>();
     private String ARRAY_PATH = "array_path";
     Context context;
     int posImage;
     int posAlbum;
-    PhotoView fullImage;
     Toolbar toolbar;
-    // public static int hide = 0;
+
     BottomNavigationView fullImageNav;
     View hideView;
     //Đường dẫn của ảnh hiện tại
@@ -76,6 +82,7 @@ public class FullscreenImageActivity extends AppCompatActivity {
 
         viewPager = findViewById(R.id.viewpager);
         fullImageNav = findViewById(R.id.nav_bottom);
+        fullImageNav.setOnNavigationItemSelectedListener(this);
 
         //Khởi tạo context
         context = FullscreenImageActivity.this;
@@ -107,79 +114,9 @@ public class FullscreenImageActivity extends AppCompatActivity {
         posImage = bFullImage.getInt("posImage");
         curPath = allPath.get(posAlbum).getAllImagePath().get(posImage);
         setupViewPager();
-
-
-        //Khởi tạo sự kiện click cho item trong bottom navigation
-        fullImageNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.nva_share:
-                        /*Toast.makeText(FullscreenImageActivity.this, "Chức năng tạm thời chưa hỗ trợ!", Toast.LENGTH_SHORT).show();*/
-                        startActivity(Intent.createChooser(shareIntent(), "Chia sẻ ảnh đang sử dụng"));
-                        break;
-                    case R.id.nav_filter:
-                        Toast.makeText(FullscreenImageActivity.this, "Chức năng tạm thời chưa hỗ trợ!", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.nav_crop:
-                        Toast.makeText(FullscreenImageActivity.this, "Chức năng tạm thời chưa hỗ trợ!", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.nva_delete:
-                        /*Toast.makeText(FullscreenImageActivity.this, "Chức năng tạm thời chưa hỗ trợ!", Toast.LENGTH_SHORT).show();*/
-
-                        final File deleteFile = new File(curPath);
-
-                        // Tạo biến builder thông báo xác nhận việc xóa ảnh
-                        AlertDialog builder;
-                        builder = new AlertDialog.Builder(context, android.R.style.Theme_DeviceDefault_Dialog_Alert).create();
-
-                        builder.setMessage("Xóa ảnh?");
-                        //Nếu nhấn Xóa
-                        builder.setButton(Dialog.BUTTON_POSITIVE, "Xóa", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Nguồn tham khảo: http://stackoverflow.com/a/20780472#1#L0
-                                String[] projection = {MediaStore.Images.Media._ID};
-
-                                String selection = MediaStore.Images.Media.DATA + " = ?";
-                                String[] selectionArgs = new String[]{deleteFile.getAbsolutePath()};
-
-                                Uri queryUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                                ContentResolver contentResolver = getContentResolver();
-                                Cursor c = contentResolver.query(queryUri, projection, selection, selectionArgs, null);
-                                if (c.moveToFirst()) {
-                                    long id = c.getLong(c.getColumnIndexOrThrow(MediaStore.Images.Media._ID));
-                                    Uri deleteUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
-                                    contentResolver.delete(deleteUri, null, null);
-                                    Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(context, "Xóa không thành công", Toast.LENGTH_SHORT).show();
-                                }
-                                c.close();
-                                Toast.makeText(context, "Đã xóa", Toast.LENGTH_SHORT).show();
-                                dialog.dismiss();
-                            }
-
-                        });
-
-                        //Nếu Nhấn hủy
-                        builder.setButton(Dialog.BUTTON_NEGATIVE, "Thoát", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-
-                        builder.show();
-                        break;
-                }
-                return true;
-            }
-        });
     }
 
     private void setupViewPager() {
-        // ArrayList<Album> images = new ArrayList<>();
-        // images.addAll(allPath);
-
         fullScreenImageAdapter = new FullscreenImageAdapter(this, allPath, posAlbum);
 
         viewPager.setAdapter(fullScreenImageAdapter);
@@ -281,11 +218,32 @@ public class FullscreenImageActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_setAs:
+                try {
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_ATTACH_DATA);
+                    File file = new File(curPath);
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                    intent.setDataAndType(FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", file), getMimeType(curPath));
+                    context.startActivity(intent);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(context, "Exception generated", Toast.LENGTH_SHORT).show();
+                }
 
+                //Nguồn tham khảo: https://stackoverflow.com/questions/11091980/how-to-use-intent-attach-data
                 return true;
         }
 
         return true;
+    }
+
+    private static String getMimeType(String url) {
+        String type = null;
+        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+        if (extension != null) {
+            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+        }
+        return type;
     }
 
     private String getImageInfo(ExifInterface exifInterface) {
@@ -360,4 +318,119 @@ public class FullscreenImageActivity extends AppCompatActivity {
         //Nguồn tham khảo https://stackoverflow.com/questions/50513299/why-this-share-images-not-work-with-all-mobile-devices-only-some
     }
 
+
+    private void Crop() {
+        String filePath = allPath.get(posAlbum).getAllImagePath().get(posImage);
+        Uri photoURI = Uri.fromFile(new File(filePath));
+        if (photoURI != null) {
+            CropImage.activity(photoURI)
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .start(this);
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+                Bitmap b = null;
+                try {
+                    b = MediaStore.Images.Media.getBitmap(getContentResolver(), resultUri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                InsertImageToGallery(getContentResolver(),b);
+                Toast.makeText(this, "Image cropped completely", Toast.LENGTH_SHORT).show();
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    public void InsertImageToGallery(ContentResolver contentResolver, Bitmap bitmap) {
+        String photoUriStr = MediaStore.Images.Media.insertImage(contentResolver, bitmap, "" , "");
+        Uri photoUri = Uri.parse(photoUriStr);
+        long now = System.currentTimeMillis() / 1000;
+
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.DATE_ADDED, now);
+        values.put(MediaStore.Images.Media.DATE_MODIFIED, now);
+        values.put(MediaStore.Images.Media.DATE_TAKEN, now);
+
+        contentResolver.update(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values,
+                MediaStore.Images.Media._ID + "=?", new String [] { ContentUris.parseId(photoUri) + "" });
+
+        Intent scanFileIntent = new Intent(
+                Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, photoUri);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(scanFileIntent);
+        fullScreenImageAdapter.notifyDataSetChanged();
+    }
+
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.nva_share:
+                /*Toast.makeText(FullscreenImageActivity.this, "Chức năng tạm thời chưa hỗ trợ!", Toast.LENGTH_SHORT).show();*/
+                startActivity(Intent.createChooser(shareIntent(), "Chia sẻ ảnh đang sử dụng"));
+                break;
+            case R.id.nav_filter:
+                Toast.makeText(FullscreenImageActivity.this, "Chức năng tạm thời chưa hỗ trợ!", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_crop:
+                Crop();
+                break;
+            case R.id.nva_delete:
+                /*Toast.makeText(FullscreenImageActivity.this, "Chức năng tạm thời chưa hỗ trợ!", Toast.LENGTH_SHORT).show();*/
+
+                final File deleteFile = new File(curPath);
+
+                // Tạo biến builder thông báo xác nhận việc xóa ảnh
+                AlertDialog builder;
+                builder = new AlertDialog.Builder(context, android.R.style.Theme_DeviceDefault_Dialog_Alert).create();
+
+                builder.setMessage("Xóa ảnh?");
+                //Nếu nhấn Xóa
+                builder.setButton(Dialog.BUTTON_POSITIVE, "Xóa", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Nguồn tham khảo: http://stackoverflow.com/a/20780472#1#L0
+                        String[] projection = {MediaStore.Images.Media._ID};
+
+                        String selection = MediaStore.Images.Media.DATA + " = ?";
+                        String[] selectionArgs = new String[]{deleteFile.getAbsolutePath()};
+
+                        Uri queryUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                        ContentResolver contentResolver = getContentResolver();
+                        Cursor c = contentResolver.query(queryUri, projection, selection, selectionArgs, null);
+                        if (c.moveToFirst()) {
+                            long id = c.getLong(c.getColumnIndexOrThrow(MediaStore.Images.Media._ID));
+                            Uri deleteUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
+                            contentResolver.delete(deleteUri, null, null);
+                            Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(context, "Xóa không thành công", Toast.LENGTH_SHORT).show();
+                        }
+                        c.close();
+                        Toast.makeText(context, "Đã xóa", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
+
+                });
+
+                //Nếu Nhấn hủy
+                builder.setButton(Dialog.BUTTON_NEGATIVE, "Thoát", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                builder.show();
+                break;
+        }
+        return false;
+    }
 }
