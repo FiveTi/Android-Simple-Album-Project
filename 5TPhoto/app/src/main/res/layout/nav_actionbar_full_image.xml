@@ -4,6 +4,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="?attr/actionBarSize"
     android:layout_width="match_parent"
-    android:background="#66c2bdbd"
+    android:background="@color/primaryColorDark"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 </android.support.v7.widget.Toolbar>

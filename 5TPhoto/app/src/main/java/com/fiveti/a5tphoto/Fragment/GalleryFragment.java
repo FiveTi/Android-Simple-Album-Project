@@ -14,7 +14,7 @@ import android.widget.GridView;
 import com.fiveti.a5tphoto.Activity.FullscreenImageActivity;
 import com.fiveti.a5tphoto.Activity.MainActivity;
 import com.fiveti.a5tphoto.Adapter.GridViewAdapter;
-import com.fiveti.a5tphoto.Album;
+import com.fiveti.a5tphoto.Database.Album;
 import com.fiveti.a5tphoto.R;
 
 import java.util.ArrayList;
@@ -24,7 +24,6 @@ public class GalleryFragment extends Fragment {
     GridViewAdapter adapter;
 
     private String ARRAY_PATH = "array_path";
-    public static ArrayList<Album> all_images_path = new ArrayList<>();
     public static ArrayList<Album> allPathGalery = new ArrayList<>();
 
     public static int NUM_GRID_COLUMNS=4;
@@ -36,23 +35,18 @@ public class GalleryFragment extends Fragment {
 
         gvAlbum = (GridView) v.findViewById(R.id.gridViewGallery);
 
-        Bundle bGallery = getArguments();
-        all_images_path = (ArrayList<Album>) bGallery.getSerializable(ARRAY_PATH);
-
         // dua het tat ca duong dan hinh anh vao mot thu muc de load vao tab layout gallery
         ArrayList<String> allImagePath = new ArrayList<>();
-        for (int i = 0; i < all_images_path.size(); i++) {
+        for (int i = 0; i < MainActivity.all_images_path.size(); i++) {
 
-            for (int j = 0; j < all_images_path.get(i).getAllImagePath().size(); j++) {
+            for (int j = 0; j < MainActivity.all_images_path.get(i).getAllImagePath().size(); j++) {
 
-                allImagePath.add(all_images_path.get(i).getAllImagePath().get(j));
-
+                allImagePath.add(MainActivity.all_images_path.get(i).getAllImagePath().get(j));
             }
-
         }
 
         Album obj = new Album();
-        obj.setFolder(all_images_path.get(0).getFolder());
+        obj.setAlbumName(MainActivity.all_images_path.get(0).getAlbumName());
         obj.setAllImagePath(allImagePath);
         allPathGalery.add(obj);
         //
@@ -69,19 +63,23 @@ public class GalleryFragment extends Fragment {
         gvAlbum.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-                Intent iFullImage = new Intent(getActivity(), FullscreenImageActivity.class);
-                //Gửi vị trí ảnh hiện tại và cả mảng file
-                Bundle bFullImage = new Bundle();
-                bFullImage.putSerializable(ARRAY_PATH, allPathGalery);
-                bFullImage.putInt("posAlbum", 0);
-                bFullImage.putInt("posImage", i);
-                iFullImage.putExtras(bFullImage);
-                startActivity(iFullImage);
-
+                ShowFullscreenImage(i);
             }
         });
 
         return v;
+    }
+
+    void ShowFullscreenImage(int posImage)
+    {
+        Intent iFullImage = new Intent(getActivity(), FullscreenImageActivity.class);
+        //Gửi vị trí ảnh hiện tại và cả mảng file
+        Bundle bFullImage = new Bundle();
+        bFullImage.putSerializable(ARRAY_PATH, allPathGalery);
+        bFullImage.putInt("posAlbum", 0);
+        bFullImage.putInt("posImage", posImage);
+        iFullImage.putExtras(bFullImage);
+        startActivity(iFullImage);
     }
 
 }

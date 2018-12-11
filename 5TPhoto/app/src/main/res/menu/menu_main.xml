@@ -8,4 +8,12 @@
         android:title="Camera"
         app:showAsAction="never"
         android:icon="@drawable/ic_photo_camera_black_24dp"/>
+
+    <item
+        android:id="@+id/action_create_album"
+        android:orderInCategory="100"
+        android:title="Create new album"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_photo_camera_black_24dp"/>
+
 </menu>

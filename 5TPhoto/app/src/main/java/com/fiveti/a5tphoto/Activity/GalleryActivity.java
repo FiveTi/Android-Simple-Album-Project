@@ -11,7 +11,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.fiveti.a5tphoto.Adapter.GridViewAdapter;
-import com.fiveti.a5tphoto.Album;
+import com.fiveti.a5tphoto.Database.Album;
 import com.fiveti.a5tphoto.R;
 
 import java.util.ArrayList;
@@ -21,7 +21,6 @@ public class GalleryActivity extends AppCompatActivity {
     GridViewAdapter adapter;
 
     private String ARRAY_PATH = "array_path";
-    private ArrayList<Album> all_images_path = new ArrayList<>();
     int posAlbum;
     ActionBar actionBar;
 
@@ -33,22 +32,21 @@ public class GalleryActivity extends AppCompatActivity {
         gvAlbum = (GridView)findViewById(R.id.gridViewGallery);
 
         Bundle bGallery = this.getIntent().getExtras();
-        all_images_path = (ArrayList<Album>) bGallery.getSerializable(ARRAY_PATH);
         posAlbum = bGallery.getInt("posAlbum");
 
-        adapter = new GridViewAdapter(this, all_images_path, posAlbum);
+        adapter = new GridViewAdapter(this, MainActivity.all_images_path, posAlbum);
         gvAlbum.setAdapter(adapter);
         gvAlbum.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-                //Gửi vị trí ảnh hiện tại, tên ảnh và cả mảng file
-                showAlbum(i);
+                //Gửi vị trí ảnh hiện tại
+                showFullscreenImage(i);
             }
         });
 
         actionBar = getSupportActionBar();
         if( actionBar != null){
-            actionBar.setTitle(all_images_path.get(posAlbum).getFolder());
+            actionBar.setTitle(MainActivity.all_images_path.get(posAlbum).getAlbumName());
             actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
@@ -65,11 +63,11 @@ public class GalleryActivity extends AppCompatActivity {
         return false;
     }
 
-    public void showAlbum(int posImage)
+    public void showFullscreenImage(int posImage)
     {
         Intent iFullImage = new Intent(this, FullscreenImageActivity.class);
         Bundle bFullImage = new Bundle();
-        bFullImage.putSerializable(ARRAY_PATH, all_images_path);
+        bFullImage.putSerializable(ARRAY_PATH, MainActivity.all_images_path);
         bFullImage.putInt("posAlbum", posAlbum);
         bFullImage.putInt("posImage", posImage);
         iFullImage.putExtras(bFullImage);

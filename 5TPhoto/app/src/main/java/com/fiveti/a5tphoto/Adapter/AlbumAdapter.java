@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.fiveti.a5tphoto.Fragment.SquareImageView;
-import com.fiveti.a5tphoto.Album;
+import com.fiveti.a5tphoto.Database.Album;
 import com.fiveti.a5tphoto.R;
 
 import java.util.ArrayList;
@@ -75,7 +75,7 @@ public class AlbumAdapter extends ArrayAdapter<Album> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.folder.setText(all_images_path.get(position).getFolder());
+        viewHolder.folder.setText(all_images_path.get(position).getAlbumName());
         viewHolder.number.setText(all_images_path.get(position).getAllImagePath().size()+"");
 
 

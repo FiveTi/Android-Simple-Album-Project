@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.fiveti.a5tphoto.Fragment.SquareImageView;
-import com.fiveti.a5tphoto.Album;
+import com.fiveti.a5tphoto.Database.Album;
 import com.fiveti.a5tphoto.R;
 
 import java.util.ArrayList;

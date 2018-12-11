@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.fiveti.a5tphoto.Activity.FullscreenImageActivity;
-import com.fiveti.a5tphoto.Album;
+import com.fiveti.a5tphoto.Database.Album;
 import com.fiveti.a5tphoto.R;
 import com.github.chrisbanes.photoview.PhotoView;
 

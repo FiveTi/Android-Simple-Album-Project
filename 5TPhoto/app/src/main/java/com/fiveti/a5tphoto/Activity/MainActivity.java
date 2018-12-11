@@ -16,9 +16,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.fiveti.a5tphoto.Database.SQLiteDatabase;
 import com.fiveti.a5tphoto.Fragment.AlbumFragment;
 import com.fiveti.a5tphoto.Fragment.GalleryFragment;
-import com.fiveti.a5tphoto.Album;
+import com.fiveti.a5tphoto.Database.Album;
 import com.fiveti.a5tphoto.OpenCamera.openCamera;
 import com.fiveti.a5tphoto.R;
 
@@ -31,7 +32,9 @@ public class MainActivity extends AppCompatActivity {
     boolean boolean_folder;
 
     private static final int REQUEST_PERMISSIONS = 100;
-    private String ARRAY_PATH = "array_path";
+    //private String ARRAY_PATH = "array_path";
+
+    SQLiteDatabase myAlbumdb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,13 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
 
         getImagesPath();
+
+        myAlbumdb = new SQLiteDatabase(this, "FiveTPhoto.sqlite", null, 1);
+        //myAlbumdb.QueryData("drop table if exists Album");
+        // tạo bảng
+        myAlbumdb.QueryData("CREATE TABLE IF NOT EXISTS Album (Image_Path TEXT PRIMARY KEY, Album_Name TEXT)");
+
+        readSQliteDatabaseAlbum();
 
         setupViewPager(mViewPager);
         mTabLayout.setupWithViewPager(mViewPager);
@@ -105,12 +115,16 @@ public class MainActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_camera) {
-            Intent intent = new Intent(this, openCamera.class);
-            startActivity(intent);
-            return true;
+        switch(item.getItemId())
+        {
+            case R.id.action_camera:
+                Intent iCamera = new Intent(this, openCamera.class);
+                startActivity(iCamera);
+                break;
+            case R.id.action_create_album:
+                Intent iCreateAl = new Intent(this, CreateAlbumActivity.class);
+                startActivity(iCreateAl);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -122,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
         int int_position = 0;
         Uri uri;
         Cursor cursor;
-        int column_index_data, column_index_folder_name;
+        //int column_index_data, column_index_folder_name;
 
         String absolutePathOfImage = null;
         uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
@@ -132,13 +146,13 @@ public class MainActivity extends AppCompatActivity {
         final String orderBy = MediaStore.Images.Media.DATE_TAKEN;
         cursor = getApplicationContext().getContentResolver().query(uri, projection, null, null, orderBy + " DESC");
 
-        column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-        column_index_folder_name = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
+        //column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+        //column_index_folder_name = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
         while (cursor.moveToNext()) {
-            absolutePathOfImage = cursor.getString(column_index_data);
+            absolutePathOfImage = cursor.getString(0);
 
             for (int i = 0; i < all_images_path.size(); i++) {
-                if (all_images_path.get(i).getFolder().equals(cursor.getString(column_index_folder_name))) {
+                if (all_images_path.get(i).getAlbumName().equals(cursor.getString(1))) {
                     boolean_folder = true;
                     int_position = i;
                     break;
@@ -158,7 +172,43 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<String> al_path = new ArrayList<>();
                 al_path.add(absolutePathOfImage);
                 Album obj_model = new Album();
-                obj_model.setFolder(cursor.getString(column_index_folder_name));
+                obj_model.setAlbumName(cursor.getString(1));
+                obj_model.setAllImagePath(al_path);
+                all_images_path.add(obj_model);
+            }
+        }
+        return all_images_path;
+    }
+
+    public ArrayList<Album> readSQliteDatabaseAlbum()
+    {
+        int int_position = 0;
+        Cursor albumData = myAlbumdb.GetData("SELECT * FROM Album");
+
+        while (albumData.moveToNext())
+        {
+            for (int i = 0; i < all_images_path.size(); i++) {
+                if (all_images_path.get(i).getAlbumName().equals(albumData.getString(1))) {
+                    boolean_folder = true;
+                    int_position = i;
+                    break;
+                } else {
+                    boolean_folder = false;
+                }
+            }
+
+            if (boolean_folder) {
+
+                ArrayList<String> al_path = new ArrayList<>();
+                al_path.addAll(all_images_path.get(int_position).getAllImagePath());
+                al_path.add(albumData.getString(0));
+                all_images_path.get(int_position).setAllImagePath(al_path);
+
+            } else {
+                ArrayList<String> al_path = new ArrayList<>();
+                al_path.add(albumData.getString(0));
+                Album obj_model = new Album();
+                obj_model.setAlbumName(albumData.getString(1));
                 obj_model.setAllImagePath(al_path);
                 all_images_path.add(obj_model);
             }
@@ -168,24 +218,11 @@ public class MainActivity extends AppCompatActivity {
 
     public Fragment openGallery() {
         Fragment fragment = new GalleryFragment();
-        Bundle bGallery = new Bundle();
-        bGallery.putSerializable(ARRAY_PATH, all_images_path);
-        fragment.setArguments(bGallery);
         return fragment;
     }
 
     public Fragment openAlbum() {
         Fragment fragment = new AlbumFragment();
-        Bundle bAlbum = new Bundle();
-        bAlbum.putSerializable(ARRAY_PATH, all_images_path);
-        fragment.setArguments(bAlbum);
         return fragment;
     }
-
-/*    @Override
-    protected void onPause() {
-        super.onPause();
-        all_images_path.clear();
-        all_images_path=getImagesPath();
-    }*/
 }

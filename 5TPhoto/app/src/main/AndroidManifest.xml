@@ -55,7 +55,14 @@
             android:parentActivityName=".Activity.MainActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
         </activity>
-
+        <activity android:name=".Activity.CreateAlbumActivity"
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+        </activity>
+        <activity android:name=".Activity.SelectImagesActivity"
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        </activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
