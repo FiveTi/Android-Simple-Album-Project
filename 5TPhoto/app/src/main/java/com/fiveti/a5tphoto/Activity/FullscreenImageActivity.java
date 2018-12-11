@@ -56,6 +56,7 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
     Context context;
     int posImage;
     int posAlbum;
+    int posAlbumReal;
     Toolbar toolbar;
 
     BottomNavigationView fullImageNav;
@@ -112,6 +113,7 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
         allPath = (ArrayList<Album>) bFullImage.getSerializable(ARRAY_PATH);
         posAlbum = bFullImage.getInt("posAlbum");
         posImage = bFullImage.getInt("posImage");
+        posAlbumReal = bFullImage.getInt("posAlbumReal");
         curPath = allPath.get(posAlbum).getAllImagePath().get(posImage);
         setupViewPager();
     }
@@ -326,8 +328,9 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
             CropImage.activity(photoURI)
                     .setGuidelines(CropImageView.Guidelines.ON)
                     .start(this);
-        }
 
+        }
+        setupViewPager();
     }
 
     @Override
@@ -383,6 +386,7 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
                 break;
             case R.id.nav_crop:
                 Crop();
+                setupViewPager();
                 break;
             case R.id.nva_delete:
                 /*Toast.makeText(FullscreenImageActivity.this, "Chức năng tạm thời chưa hỗ trợ!", Toast.LENGTH_SHORT).show();*/
@@ -410,12 +414,17 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
                             long id = c.getLong(c.getColumnIndexOrThrow(MediaStore.Images.Media._ID));
                             Uri deleteUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
                             contentResolver.delete(deleteUri, null, null);
+
+                            allPath.get(posAlbum).getAllImagePath().remove(posImage);
+                            MainActivity.all_images_path.get(posAlbumReal).getAllImagePath().remove(posImage);
+                            setupViewPager();
+
                             Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(context, "Xóa không thành công", Toast.LENGTH_SHORT).show();
                         }
                         c.close();
-                        Toast.makeText(context, "Đã xóa", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, "Đã xóa", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                     }
 

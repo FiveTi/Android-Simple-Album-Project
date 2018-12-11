@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fiveti.a5tphoto.Adapter.SelectImagesForAlbumAdapter;
 import com.fiveti.a5tphoto.Database.Album;
@@ -100,6 +101,7 @@ public class SelectImagesActivity extends AppCompatActivity {
                 for(int position = 0; position < newAlbum.size(); position++) {
                     myAlbumdb.QueryData("INSERT INTO Album VALUES ('"+ newAlbum.get(position) +"', '"+ albumName +"')");
                 }
+                Toast.makeText(v.getContext(), "tạo album " + albumName + "thành công!", Toast.LENGTH_SHORT).show();
                 showMain();
             }
         });

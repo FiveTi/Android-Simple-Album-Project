@@ -49,6 +49,13 @@ public class AlbumFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (adapter != null){
+            adapter.notifyDataSetChanged();
+        }
+    }
 //    @Override
 //    public void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);

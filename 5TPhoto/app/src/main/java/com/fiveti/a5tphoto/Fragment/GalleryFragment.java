@@ -35,20 +35,7 @@ public class GalleryFragment extends Fragment {
 
         gvAlbum = (GridView) v.findViewById(R.id.gridViewGallery);
 
-        // dua het tat ca duong dan hinh anh vao mot thu muc de load vao tab layout gallery
-        ArrayList<String> allImagePath = new ArrayList<>();
-        for (int i = 0; i < MainActivity.all_images_path.size(); i++) {
-
-            for (int j = 0; j < MainActivity.all_images_path.get(i).getAllImagePath().size(); j++) {
-
-                allImagePath.add(MainActivity.all_images_path.get(i).getAllImagePath().get(j));
-            }
-        }
-
-        Album obj = new Album();
-        obj.setAlbumName(MainActivity.all_images_path.get(0).getAlbumName());
-        obj.setAllImagePath(allImagePath);
-        allPathGalery.add(obj);
+        getPathGallery();
         //
         adapter = new GridViewAdapter(v.getContext(), allPathGalery, 0);
 
@@ -78,9 +65,54 @@ public class GalleryFragment extends Fragment {
         bFullImage.putSerializable(ARRAY_PATH, allPathGalery);
         bFullImage.putInt("posAlbum", 0);
         bFullImage.putInt("posImage", posImage);
+        bFullImage.putInt("posAlbumReal", getPosAlbumReal(posImage));
         iFullImage.putExtras(bFullImage);
         startActivity(iFullImage);
     }
 
+    int getPosAlbumReal(int pos)
+    {
+        int posAlbumReal = 0;
+        for(int i = 0; i < MainActivity.all_images_path.size(); i++)
+        {
+            if(pos > MainActivity.all_images_path.get(i).getAllImagePath().size())
+            {
+                pos -= MainActivity.all_images_path.get(i).getAllImagePath().size();
+                posAlbumReal++;
+            }
+            else
+            {
+                break;
+            }
+        }
+        return posAlbumReal;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (adapter != null){
+            allPathGalery.clear();
+            getPathGallery();
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    void getPathGallery()
+    {
+        // dua het tat ca duong dan hinh anh vao mot thu muc de load vao tab layout gallery
+        ArrayList<String> allImagePath = new ArrayList<>();
+        for (int i = 0; i < MainActivity.all_images_path.size(); i++) {
+
+            for (int j = 0; j < MainActivity.all_images_path.get(i).getAllImagePath().size(); j++) {
+
+                allImagePath.add(MainActivity.all_images_path.get(i).getAllImagePath().get(j));
+            }
+        }
+        Album obj = new Album();
+        obj.setAlbumName(MainActivity.all_images_path.get(0).getAlbumName());
+        obj.setAllImagePath(allImagePath);
+        allPathGalery.add(obj);
+    }
 }
 

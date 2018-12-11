@@ -70,6 +70,7 @@ public class GalleryActivity extends AppCompatActivity {
         bFullImage.putSerializable(ARRAY_PATH, MainActivity.all_images_path);
         bFullImage.putInt("posAlbum", posAlbum);
         bFullImage.putInt("posImage", posImage);
+        bFullImage.putInt("posAlbumReal", posAlbum);
         iFullImage.putExtras(bFullImage);
         startActivity(iFullImage);
     }
