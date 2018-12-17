@@ -16,6 +16,8 @@ import android.widget.Toast;
 import com.fiveti.a5tphoto.Adapter.SelectImagesForAlbumAdapter;
 import com.fiveti.a5tphoto.Database.Album;
 import com.fiveti.a5tphoto.Database.SQLiteDatabase;
+import com.fiveti.a5tphoto.Fragment.AlbumFragment;
+import com.fiveti.a5tphoto.Fragment.GalleryFragment;
 import com.fiveti.a5tphoto.R;
 
 import java.util.ArrayList;
@@ -101,7 +103,7 @@ public class SelectImagesActivity extends AppCompatActivity {
                 for(int position = 0; position < newAlbum.size(); position++) {
                     myAlbumdb.QueryData("INSERT INTO Album VALUES ('"+ newAlbum.get(position) +"', '"+ albumName +"')");
                 }
-                Toast.makeText(v.getContext(), "tạo album " + albumName + "thành công!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), "tạo album " + albumName + " thành công!", Toast.LENGTH_SHORT).show();
                 showMain();
             }
         });

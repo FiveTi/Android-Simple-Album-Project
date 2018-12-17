@@ -1,7 +1,11 @@
 package com.fiveti.a5tphoto.Fragment;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +19,7 @@ import com.fiveti.a5tphoto.Activity.FullscreenImageActivity;
 import com.fiveti.a5tphoto.Activity.MainActivity;
 import com.fiveti.a5tphoto.Adapter.GridViewAdapter;
 import com.fiveti.a5tphoto.Database.Album;
+import com.fiveti.a5tphoto.Database.SQLiteDatabase;
 import com.fiveti.a5tphoto.R;
 
 import java.util.ArrayList;
@@ -28,14 +33,19 @@ public class GalleryFragment extends Fragment {
 
     public static int NUM_GRID_COLUMNS=4;
 
+    SQLiteDatabase db;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_gallery, container, false);
 
         gvAlbum = (GridView) v.findViewById(R.id.gridViewGallery);
+        db = new SQLiteDatabase(getActivity(), "FiveTPhoto.sqlite", null, 1);
 
-        getPathGallery();
+        getImagesPath(getActivity());
+        readSQliteDatabaseAlbum(db);
+        //getPathGallery();
         //
         adapter = new GridViewAdapter(v.getContext(), allPathGalery, 0);
 
@@ -65,54 +75,59 @@ public class GalleryFragment extends Fragment {
         bFullImage.putSerializable(ARRAY_PATH, allPathGalery);
         bFullImage.putInt("posAlbum", 0);
         bFullImage.putInt("posImage", posImage);
-        bFullImage.putInt("posAlbumReal", getPosAlbumReal(posImage));
         iFullImage.putExtras(bFullImage);
         startActivity(iFullImage);
     }
 
-    int getPosAlbumReal(int pos)
-    {
-        int posAlbumReal = 0;
-        for(int i = 0; i < MainActivity.all_images_path.size(); i++)
-        {
-            if(pos > MainActivity.all_images_path.get(i).getAllImagePath().size())
-            {
-                pos -= MainActivity.all_images_path.get(i).getAllImagePath().size();
-                posAlbumReal++;
-            }
-            else
-            {
-                break;
-            }
-        }
-        return posAlbumReal;
-    }
 
     @Override
     public void onResume() {
         super.onResume();
         if (adapter != null){
             allPathGalery.clear();
-            getPathGallery();
+            getImagesPath(getActivity());
+            readSQliteDatabaseAlbum(db);
             adapter.notifyDataSetChanged();
+          // }
         }
     }
 
-    void getPathGallery()
-    {
-        // dua het tat ca duong dan hinh anh vao mot thu muc de load vao tab layout gallery
-        ArrayList<String> allImagePath = new ArrayList<>();
-        for (int i = 0; i < MainActivity.all_images_path.size(); i++) {
+    void getImagesPath(Activity activity) {
+        allPathGalery.clear();
+        Uri uri;
+        Cursor cursor;
+        //int column_index_data, column_index_folder_name;
 
-            for (int j = 0; j < MainActivity.all_images_path.get(i).getAllImagePath().size(); j++) {
+        String absolutePathOfImage = null;
+        uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
-                allImagePath.add(MainActivity.all_images_path.get(i).getAllImagePath().get(j));
-            }
+        String[] projection = {MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME};
+
+        final String orderBy = MediaStore.Images.Media.DATE_TAKEN;
+        cursor = activity.getContentResolver().query(uri, projection, null, null, orderBy + " DESC");
+
+        ArrayList<String> al_path = new ArrayList<String>();
+        Album obj_model = new Album();
+
+        obj_model.setAlbumName("Gallery");
+
+        while (cursor.moveToNext()) {
+                al_path.add(cursor.getString(0));
         }
-        Album obj = new Album();
-        obj.setAlbumName(MainActivity.all_images_path.get(0).getAlbumName());
-        obj.setAllImagePath(allImagePath);
-        allPathGalery.add(obj);
+        obj_model.setAllImagePath(al_path);
+        obj_model.setType(2);
+        allPathGalery.add(obj_model);
+    }
+
+    void readSQliteDatabaseAlbum(SQLiteDatabase db)
+    {
+        Cursor albumData = db.GetData("SELECT * FROM Album");
+
+            ArrayList<String> al_path = new ArrayList<>();
+            while (albumData.moveToNext()) {
+                al_path.add(albumData.getString(0));
+            }
+            allPathGalery.get(0).getAllImagePath().addAll(al_path);
     }
 }
 

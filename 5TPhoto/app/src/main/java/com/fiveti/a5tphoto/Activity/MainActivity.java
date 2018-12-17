@@ -1,5 +1,6 @@
 package com.fiveti.a5tphoto.Activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -29,12 +30,9 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<Album> all_images_path = new ArrayList<>();
-    boolean boolean_folder;
-
     private static final int REQUEST_PERMISSIONS = 100;
-    //private String ARRAY_PATH = "array_path";
 
-    SQLiteDatabase myAlbumdb;
+    public static SQLiteDatabase myAlbumdb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,14 +44,15 @@ public class MainActivity extends AppCompatActivity {
         ViewPager mViewPager = (ViewPager) findViewById(R.id.viewPager);
         setSupportActionBar(mToolbar);
 
-        getImagesPath();
+
 
         myAlbumdb = new SQLiteDatabase(this, "FiveTPhoto.sqlite", null, 1);
         //myAlbumdb.QueryData("drop table if exists Album");
         // tạo bảng
-        myAlbumdb.QueryData("CREATE TABLE IF NOT EXISTS Album (Image_Path TEXT PRIMARY KEY, Album_Name TEXT)");
+        myAlbumdb.QueryData("CREATE TABLE IF NOT EXISTS Album (Image_Path TEXT , Album_Name TEXT)");
 
-        readSQliteDatabaseAlbum();
+        getImagesPath(this);
+        readSQliteDatabaseAlbum(myAlbumdb);
 
         setupViewPager(mViewPager);
         mTabLayout.setupWithViewPager(mViewPager);
@@ -130,9 +129,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public ArrayList<Album> getImagesPath() {
+    public static void getImagesPath(Activity activity) {
         all_images_path.clear();
-
+        boolean boolean_folder = false;
         int int_position = 0;
         Uri uri;
         Cursor cursor;
@@ -144,10 +143,8 @@ public class MainActivity extends AppCompatActivity {
         String[] projection = {MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME};
 
         final String orderBy = MediaStore.Images.Media.DATE_TAKEN;
-        cursor = getApplicationContext().getContentResolver().query(uri, projection, null, null, orderBy + " DESC");
+        cursor = activity.getContentResolver().query(uri, projection, null, null, orderBy + " DESC");
 
-        //column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-        //column_index_folder_name = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
         while (cursor.moveToNext()) {
             absolutePathOfImage = cursor.getString(0);
 
@@ -167,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
                 al_path.addAll(all_images_path.get(int_position).getAllImagePath());
                 al_path.add(absolutePathOfImage);
                 all_images_path.get(int_position).setAllImagePath(al_path);
+                all_images_path.get(int_position).setType(0);
 
             } else {
                 ArrayList<String> al_path = new ArrayList<>();
@@ -174,16 +172,17 @@ public class MainActivity extends AppCompatActivity {
                 Album obj_model = new Album();
                 obj_model.setAlbumName(cursor.getString(1));
                 obj_model.setAllImagePath(al_path);
+                obj_model.setType(0);
                 all_images_path.add(obj_model);
             }
         }
-        return all_images_path;
     }
 
-    public ArrayList<Album> readSQliteDatabaseAlbum()
+    public static void readSQliteDatabaseAlbum(SQLiteDatabase db)
     {
+        boolean boolean_folder = false;
         int int_position = 0;
-        Cursor albumData = myAlbumdb.GetData("SELECT * FROM Album");
+        Cursor albumData = db.GetData("SELECT * FROM Album");
 
         while (albumData.moveToNext())
         {
@@ -203,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
                 al_path.addAll(all_images_path.get(int_position).getAllImagePath());
                 al_path.add(albumData.getString(0));
                 all_images_path.get(int_position).setAllImagePath(al_path);
+                all_images_path.get(int_position).setType(1);
 
             } else {
                 ArrayList<String> al_path = new ArrayList<>();
@@ -210,10 +210,10 @@ public class MainActivity extends AppCompatActivity {
                 Album obj_model = new Album();
                 obj_model.setAlbumName(albumData.getString(1));
                 obj_model.setAllImagePath(al_path);
+                obj_model.setType(1);
                 all_images_path.add(obj_model);
             }
         }
-        return all_images_path;
     }
 
     public Fragment openGallery() {

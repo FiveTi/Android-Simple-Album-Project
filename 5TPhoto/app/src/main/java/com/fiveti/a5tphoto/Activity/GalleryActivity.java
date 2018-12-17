@@ -11,10 +11,8 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.fiveti.a5tphoto.Adapter.GridViewAdapter;
-import com.fiveti.a5tphoto.Database.Album;
+import com.fiveti.a5tphoto.Fragment.AlbumFragment;
 import com.fiveti.a5tphoto.R;
-
-import java.util.ArrayList;
 
 public class GalleryActivity extends AppCompatActivity {
     GridView gvAlbum;
@@ -23,6 +21,7 @@ public class GalleryActivity extends AppCompatActivity {
     private String ARRAY_PATH = "array_path";
     int posAlbum;
     ActionBar actionBar;
+    static public int modeGalleryActivity = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +56,16 @@ public class GalleryActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         //Nếu click vào nút back
         if(item.getItemId() == android.R.id.home){
-            finish();
+
+            if(modeGalleryActivity == 1) {
+                modeGalleryActivity = 0;
+                Intent iMain = new Intent(this, MainActivity.class);
+                startActivity(iMain);
+            }
+            else
+            {
+                finish();
+            }
             return true;
         }
         return false;
@@ -70,8 +78,15 @@ public class GalleryActivity extends AppCompatActivity {
         bFullImage.putSerializable(ARRAY_PATH, MainActivity.all_images_path);
         bFullImage.putInt("posAlbum", posAlbum);
         bFullImage.putInt("posImage", posImage);
-        bFullImage.putInt("posAlbumReal", posAlbum);
         iFullImage.putExtras(bFullImage);
         startActivity(iFullImage);
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(adapter != null)
+        {
+            adapter.notifyDataSetChanged();
+        }
     }
 }

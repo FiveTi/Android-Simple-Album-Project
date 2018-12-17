@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class Album implements Serializable {
 
     String albumName;
+    int type; //loai Album, 0 nếu là Album của đt, 1 là Album tự tạo
     ArrayList<String> allImagePath;
 
     public String getAlbumName() {
@@ -24,4 +25,11 @@ public class Album implements Serializable {
         this.allImagePath = allImagePath;
     }
 
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 }

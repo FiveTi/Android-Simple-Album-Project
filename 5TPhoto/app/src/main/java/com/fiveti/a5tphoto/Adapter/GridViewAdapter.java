@@ -92,9 +92,8 @@ public class GridViewAdapter extends ArrayAdapter<Album> {
 
     }
 
-    private static class ViewHolder {
+    public static class ViewHolder {
         TextView folder, number;
         SquareImageView imageAlbum;
     }
-
 }

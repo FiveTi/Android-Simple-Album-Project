@@ -38,8 +38,10 @@ import android.widget.Toast;
 import com.fiveti.a5tphoto.Adapter.FullscreenImageAdapter;
 import com.fiveti.a5tphoto.Database.Album;
 import com.fiveti.a5tphoto.BuildConfig;
+import com.fiveti.a5tphoto.Database.SQLiteDatabase;
+import com.fiveti.a5tphoto.Fragment.AlbumFragment;
+import com.fiveti.a5tphoto.Fragment.GalleryFragment;
 import com.fiveti.a5tphoto.R;
-import com.github.chrisbanes.photoview.PhotoView;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -66,6 +68,8 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
     private ViewPager viewPager;
     private FullscreenImageAdapter fullScreenImageAdapter;
 
+    SQLiteDatabase db;
+
 
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM dd, yyyy HH:mm");
 
@@ -78,6 +82,8 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_fullscreen_image_viewpager);
+
+        db = new SQLiteDatabase(this, "FiveTPhoto.sqlite", null, 1);
 
         hideView = getWindow().getDecorView();
 
@@ -97,7 +103,7 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed(); // Implemented by activity
+                onBackPressed();// Implemented by activity
             }
         });
 
@@ -113,8 +119,9 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
         allPath = (ArrayList<Album>) bFullImage.getSerializable(ARRAY_PATH);
         posAlbum = bFullImage.getInt("posAlbum");
         posImage = bFullImage.getInt("posImage");
-        posAlbumReal = bFullImage.getInt("posAlbumReal");
         curPath = allPath.get(posAlbum).getAllImagePath().get(posImage);
+        posAlbumReal = posAlbum;
+
         setupViewPager();
     }
 
@@ -330,7 +337,6 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
                     .start(this);
 
         }
-        setupViewPager();
     }
 
     @Override
@@ -347,11 +353,14 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
                 }
                 InsertImageToGallery(getContentResolver(),b);
                 Toast.makeText(this, "Image cropped completely", Toast.LENGTH_SHORT).show();
+                showMain();
+
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }
             super.onActivityResult(requestCode, resultCode, data);
         }
+
     }
 
     public void InsertImageToGallery(ContentResolver contentResolver, Bitmap bitmap) {
@@ -370,10 +379,88 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
         Intent scanFileIntent = new Intent(
                 Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, photoUri);
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(scanFileIntent);
-        fullScreenImageAdapter.notifyDataSetChanged();
+        //fullScreenImageAdapter.notifyDataSetChanged();
     }
 
+    void DeleteImage()
+    {
+        final File deleteFile = new File(curPath);
 
+        // Tạo biến builder thông báo xác nhận việc xóa ảnh
+        AlertDialog builder;
+        builder = new AlertDialog.Builder(context, android.R.style.Theme_DeviceDefault_Dialog_Alert).create();
+
+        builder.setMessage("Xóa ảnh?");
+        //Nếu nhấn Xóa
+        builder.setButton(Dialog.BUTTON_POSITIVE, "Xóa", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                //int pos = getPosImageReal();
+                int pos = posImage;
+                if(allPath.get(posAlbum).getType() == 2)
+                {
+                    pos = getPosImageReal();
+                }
+
+                if(MainActivity.all_images_path.get(posAlbumReal).getType() == 0) {
+                    // Nguồn tham khảo: http://stackoverflow.com/a/20780472#1#L0
+                    String[] projection = {MediaStore.Images.Media._ID};
+
+                    String selection = MediaStore.Images.Media.DATA + " = ?";
+                    String[] selectionArgs = new String[]{deleteFile.getAbsolutePath()};
+
+                    Uri queryUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                    ContentResolver contentResolver = getContentResolver();
+                    Cursor c = contentResolver.query(queryUri, projection, selection, selectionArgs, null);
+                    if (c.moveToFirst()) {
+                        long id = c.getLong(c.getColumnIndexOrThrow(MediaStore.Images.Media._ID));
+                        Uri deleteUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
+                        contentResolver.delete(deleteUri, null, null);
+                        Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "Xóa không thành công", Toast.LENGTH_SHORT).show();
+                    }
+                    c.close();
+                }
+                else
+                {
+                    db.QueryData("DELETE FROM Album WHERE Image_Path = '" + curPath + "' and Album_Name = '" + MainActivity.all_images_path.get(posAlbumReal).getAlbumName() +"'");
+                    //
+                }
+
+               // AlbumFragment.modeAlbumFragment = 1;
+
+                allPath.get(posAlbum).getAllImagePath().remove(posImage);   // cập nhật lại danh sách đường dẫn trong album
+
+                if (posImage == 0 && allPath.get(posAlbum).getAllImagePath().size() == 0) {
+                    posImage--;  // trường hợp xóa ảnh duy nhất của album
+
+                } else if (posImage == allPath.get(posAlbum).getAllImagePath().size()) {
+                    // trường hợp xóa ảnh ở vị trí cuối cùng của album
+                    posImage--;
+                    curPath = allPath.get(posAlbum).getAllImagePath().get(posImage); // cập nhật lại đường dẫn fullscreen mới
+                } else {
+                    // trường hợp xóa ở các vị trí còn lại
+                    curPath = allPath.get(posAlbum).getAllImagePath().get(posImage);
+
+                }
+
+                MainActivity.all_images_path.get(posAlbumReal).getAllImagePath().remove(pos);
+                setupViewPager();
+                //Toast.makeText(context, "Đã xóa", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+
+        });
+
+        //Nếu Nhấn hủy
+        builder.setButton(Dialog.BUTTON_NEGATIVE, "Thoát", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.show();
+    }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
@@ -386,60 +473,41 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
                 break;
             case R.id.nav_crop:
                 Crop();
-                setupViewPager();
                 break;
             case R.id.nva_delete:
-                /*Toast.makeText(FullscreenImageActivity.this, "Chức năng tạm thời chưa hỗ trợ!", Toast.LENGTH_SHORT).show();*/
-
-                final File deleteFile = new File(curPath);
-
-                // Tạo biến builder thông báo xác nhận việc xóa ảnh
-                AlertDialog builder;
-                builder = new AlertDialog.Builder(context, android.R.style.Theme_DeviceDefault_Dialog_Alert).create();
-
-                builder.setMessage("Xóa ảnh?");
-                //Nếu nhấn Xóa
-                builder.setButton(Dialog.BUTTON_POSITIVE, "Xóa", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Nguồn tham khảo: http://stackoverflow.com/a/20780472#1#L0
-                        String[] projection = {MediaStore.Images.Media._ID};
-
-                        String selection = MediaStore.Images.Media.DATA + " = ?";
-                        String[] selectionArgs = new String[]{deleteFile.getAbsolutePath()};
-
-                        Uri queryUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                        ContentResolver contentResolver = getContentResolver();
-                        Cursor c = contentResolver.query(queryUri, projection, selection, selectionArgs, null);
-                        if (c.moveToFirst()) {
-                            long id = c.getLong(c.getColumnIndexOrThrow(MediaStore.Images.Media._ID));
-                            Uri deleteUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
-                            contentResolver.delete(deleteUri, null, null);
-
-                            allPath.get(posAlbum).getAllImagePath().remove(posImage);
-                            MainActivity.all_images_path.get(posAlbumReal).getAllImagePath().remove(posImage);
-                            setupViewPager();
-
-                            Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(context, "Xóa không thành công", Toast.LENGTH_SHORT).show();
-                        }
-                        c.close();
-                        //Toast.makeText(context, "Đã xóa", Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
-                    }
-
-                });
-
-                //Nếu Nhấn hủy
-                builder.setButton(Dialog.BUTTON_NEGATIVE, "Thoát", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-
-                builder.show();
+                DeleteImage();
                 break;
         }
         return false;
+    }
+  /*  void updateData()
+    {
+        MainActivity.getImagesPath(this);
+        MainActivity.readSQliteDatabaseAlbum(db);
+    }*/
+
+    int getPosImageReal()
+    {
+        posAlbumReal = 0;
+        int pos = posImage;
+        for(int i = 0; i < MainActivity.all_images_path.size(); i++)
+        {
+            if(pos >= MainActivity.all_images_path.get(i).getAllImagePath().size())
+            {
+                pos -= MainActivity.all_images_path.get(i).getAllImagePath().size();
+                posAlbumReal++;
+            }
+            else
+            {
+                break;
+            }
+        }
+        return pos;
+    }
+
+    public void showMain()
+    {
+        Intent iCreateAl= new Intent(this, MainActivity.class);
+        startActivity(iCreateAl);
     }
 }

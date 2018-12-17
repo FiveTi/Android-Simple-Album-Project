@@ -61,19 +61,6 @@ public class FullscreenImageAdapter extends PagerAdapter {
                 .skipMemoryCache(true)
                 .into(fullImage);
 
-//        PhotoViewAttacher mAttach = new PhotoViewAttacher(fullImage);
-//        mAttach.setOnPhotoTapListener(new OnPhotoTapListener() {
-//            @Override
-//            public void onPhotoTap(ImageView view, float x, float y) {
-//                hideToolbar = (hideToolbar + 1) % 2;
-//                if (hideToolbar == 1) {
-//                    context.EnterFullScreen();
-//                } else {
-//                    context.ExitFullScreen();
-//                }
-//            }
-//        });
-
 
         fullImage.setOnClickListener(new View.OnClickListener() {
             @Override
