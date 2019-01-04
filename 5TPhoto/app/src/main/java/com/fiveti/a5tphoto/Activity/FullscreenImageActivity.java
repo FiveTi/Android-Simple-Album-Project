@@ -9,6 +9,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -240,6 +241,12 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
                 }
 
                 //Nguồn tham khảo: https://stackoverflow.com/questions/11091980/how-to-use-intent-attach-data
+                return true;
+            case R.id.action_panorama:
+                Intent intentPano = new Intent(context, PanoramaActivity.class);
+                intentPano.putExtra("idImage", posImage);
+                intentPano.putExtra("idAlbum", posAlbum);
+                startActivity(intentPano);
                 return true;
         }
 

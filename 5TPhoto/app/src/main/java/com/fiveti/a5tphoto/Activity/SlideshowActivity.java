@@ -16,6 +16,7 @@ import android.widget.ViewFlipper;
 
 import com.bumptech.glide.Glide;
 import com.fiveti.a5tphoto.Database.Album;
+import com.fiveti.a5tphoto.Fragment.GalleryFragment;
 import com.fiveti.a5tphoto.R;
 
 import java.io.File;
@@ -46,7 +47,7 @@ public class SlideshowActivity extends AppCompatActivity {
         viewFlipper = findViewById(R.id.flipperView);
         intent = getIntent();
 
-        allPath = MainActivity.all_images_path;
+        allPath = GalleryFragment.allPathGalery;
         //Lấy id từ FullScreenImageActivity
         posAlbum = Objects.requireNonNull(intent.getExtras()).getInt("idAlbum");
         posImage = Objects.requireNonNull(intent.getExtras()).getInt("idImage");

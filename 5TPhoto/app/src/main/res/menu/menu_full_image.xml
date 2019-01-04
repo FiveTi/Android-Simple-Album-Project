@@ -23,4 +23,10 @@
         android:orderInCategory="200"
         app:showAsAction="never"
         android:title="Info"/>
+
+    <item
+        android:id="@+id/action_panorama"
+        android:orderInCategory="200"
+        app:showAsAction="never"
+        android:title="Panorama view"/>
 </menu>
