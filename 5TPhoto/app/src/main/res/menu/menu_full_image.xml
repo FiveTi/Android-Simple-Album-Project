@@ -25,6 +25,12 @@
         android:title="Info"/>
 
     <item
+        android:id="@+id/action_edit_in"
+        android:orderInCategory="200"
+        app:showAsAction="never"
+        android:title="Edit in"/>
+
+    <item
         android:id="@+id/action_panorama"
         android:orderInCategory="200"
         app:showAsAction="never"

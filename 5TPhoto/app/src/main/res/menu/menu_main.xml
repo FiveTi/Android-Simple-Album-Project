@@ -16,4 +16,11 @@
         app:showAsAction="never"
         android:icon="@drawable/ic_photo_camera_black_24dp"/>
 
+    <item
+        android:id="@+id/action_send_feedback"
+        android:orderInCategory="100"
+        android:title="Send feedback"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_photo_camera_black_24dp"/>
+
 </menu>

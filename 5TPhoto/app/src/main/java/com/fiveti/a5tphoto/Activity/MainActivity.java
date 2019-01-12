@@ -124,6 +124,18 @@ public class MainActivity extends AppCompatActivity {
                 Intent iCreateAl = new Intent(this, CreateAlbumActivity.class);
                 startActivity(iCreateAl);
                 break;
+            case R.id.action_send_feedback:
+                //tạo intent email
+                Intent Email = new Intent(Intent.ACTION_SEND);
+
+                Email.setType("text/email");
+                Email.putExtra(Intent.EXTRA_EMAIL, new String[] { "lequocthai1998@gmail.com" });
+                Email.putExtra(Intent.EXTRA_SUBJECT, "5TPhoto Feedback");
+                Email.putExtra(Intent.EXTRA_TEXT, "Dear ...," + "");
+
+                //gửi intent email
+                startActivity(Intent.createChooser(Email, "Send Feedback:"));
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

@@ -34,7 +34,7 @@ public class PanoramaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_panorama);
         gyroscopeObserver = new GyroscopeObserver();
-        gyroscopeObserver.setMaxRotateRadian(Math.PI / 5);
+        gyroscopeObserver.setMaxRotateRadian(Math.PI / 4);
         allPath = GalleryFragment.allPathGalery;
 
         //lấy id hình ảnh từ fullscreen activity
@@ -44,7 +44,6 @@ public class PanoramaActivity extends AppCompatActivity {
 
         PanoramaImageView panoramaImageView = findViewById(R.id.panorama_image_view);
         panoramaImageView.setGyroscopeObserver(gyroscopeObserver);
-
         Picasso.get().load("file://" + allPath.get(posAlbum).getAllImagePath().get(posImage)).into(panoramaImageView);
     }
 
@@ -54,7 +53,6 @@ public class PanoramaActivity extends AppCompatActivity {
         // Register GyroscopeObserver.
         gyroscopeObserver.register(this);
     }
-
     @Override
     protected void onPause() {
         super.onPause();

@@ -43,6 +43,7 @@ import com.fiveti.a5tphoto.Database.SQLiteDatabase;
 import com.fiveti.a5tphoto.Fragment.AlbumFragment;
 import com.fiveti.a5tphoto.Fragment.GalleryFragment;
 import com.fiveti.a5tphoto.R;
+import com.q42.android.scrollingimageview.ScrollingImageView;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -242,12 +243,26 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
 
                 //Nguồn tham khảo: https://stackoverflow.com/questions/11091980/how-to-use-intent-attach-data
                 return true;
+
+            case R.id.action_edit_in:
+                Intent editIntent = new Intent(Intent.ACTION_EDIT);
+                final File photoFile = new File(curPath);
+                Uri photoURI = FileProvider.getUriForFile(context,
+                        BuildConfig.APPLICATION_ID + ".provider",
+                        photoFile);
+                editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                editIntent.setDataAndType(photoURI,"image/jpg");
+                editIntent.putExtra(Intent.EXTRA_STREAM, photoURI);
+
+                startActivity(Intent.createChooser(editIntent, null));
+                return true;
             case R.id.action_panorama:
                 Intent intentPano = new Intent(context, PanoramaActivity.class);
                 intentPano.putExtra("idImage", posImage);
                 intentPano.putExtra("idAlbum", posAlbum);
                 startActivity(intentPano);
                 return true;
+
         }
 
         return true;
