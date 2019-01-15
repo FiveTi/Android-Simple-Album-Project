@@ -38,6 +38,7 @@ import android.widget.Toast;
 
 import com.fiveti.a5tphoto.Adapter.FullscreenImageAdapter;
 import com.fiveti.a5tphoto.Database.Album;
+import com.fiveti.a5tphoto.Database.Favorite;
 import com.fiveti.a5tphoto.BuildConfig;
 import com.fiveti.a5tphoto.Database.SQLiteDatabase;
 import com.fiveti.a5tphoto.Fragment.AlbumFragment;
@@ -71,6 +72,7 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
     private FullscreenImageAdapter fullScreenImageAdapter;
 
     SQLiteDatabase db;
+    public static SQLiteDatabase myFavorite;
 
 
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM dd, yyyy HH:mm");
@@ -86,6 +88,9 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
         setContentView(R.layout.activity_fullscreen_image_viewpager);
 
         db = new SQLiteDatabase(this, "FiveTPhoto.sqlite", null, 1);
+
+        myFavorite = new SQLiteDatabase(this, "FiveTPhoto.sqlite", null, 1);
+        myFavorite.QueryData("CREATE TABLE IF NOT EXISTS Favorite (Image_Path TEXT )");
 
         hideView = getWindow().getDecorView();
 
@@ -498,6 +503,11 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
                 break;
             case R.id.nva_delete:
                 DeleteImage();
+                break;
+            case R.id.nva_favorite:
+
+                myFavorite.QueryData("INSERT INTO Favorite VALUES (NULL,'"+ curPath+"' )");
+                Toast.makeText(FullscreenImageActivity.this, "Đã thêm vào mục yêu thích!", Toast.LENGTH_SHORT).show();
                 break;
         }
         return false;

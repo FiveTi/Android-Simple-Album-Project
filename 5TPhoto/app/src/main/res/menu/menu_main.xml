@@ -22,5 +22,11 @@
         android:title="Send feedback"
         app:showAsAction="never"
         android:icon="@drawable/ic_photo_camera_black_24dp"/>
+    <item
+        android:id="@+id/action_favorite_list"
+        android:orderInCategory="100"
+        android:title="Favorite List"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_photo_camera_black_24dp"/>
 
 </menu>

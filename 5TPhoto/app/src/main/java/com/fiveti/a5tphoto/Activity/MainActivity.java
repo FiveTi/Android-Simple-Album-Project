@@ -21,6 +21,7 @@ import com.fiveti.a5tphoto.Database.SQLiteDatabase;
 import com.fiveti.a5tphoto.Fragment.AlbumFragment;
 import com.fiveti.a5tphoto.Fragment.GalleryFragment;
 import com.fiveti.a5tphoto.Database.Album;
+import com.fiveti.a5tphoto.Database.Favorite;
 import com.fiveti.a5tphoto.OpenCamera.openCamera;
 import com.fiveti.a5tphoto.R;
 
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_PERMISSIONS = 100;
 
     public static SQLiteDatabase myAlbumdb;
+    public static SQLiteDatabase myFavorite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
         //myAlbumdb.QueryData("drop table if exists Album");
         // tạo bảng
         myAlbumdb.QueryData("CREATE TABLE IF NOT EXISTS Album (Image_Path TEXT , Album_Name TEXT)");
+
+        myFavorite = new SQLiteDatabase(this, "FiveTPhoto.sqlite", null, 1);
+        myFavorite.QueryData("CREATE TABLE IF NOT EXISTS Favorite (Image_Path TEXT )");
 
         getImagesPath(this);
         readSQliteDatabaseAlbum(myAlbumdb);
@@ -135,6 +140,9 @@ public class MainActivity extends AppCompatActivity {
 
                 //gửi intent email
                 startActivity(Intent.createChooser(Email, "Send Feedback:"));
+                break;
+            case R.id.action_favorite_list:
+
                 break;
         }
         return super.onOptionsItemSelected(item);
