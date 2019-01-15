@@ -505,8 +505,8 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
                 DeleteImage();
                 break;
             case R.id.nva_favorite:
-
-                myFavorite.QueryData("INSERT INTO Favorite VALUES (NULL,'"+ curPath+"' )");
+                String ip = curPath;
+                myFavorite.QueryData("INSERT INTO Favorite VALUES ('"+ip+"')");
                 Toast.makeText(FullscreenImageActivity.this, "Đã thêm vào mục yêu thích!", Toast.LENGTH_SHORT).show();
                 break;
         }
