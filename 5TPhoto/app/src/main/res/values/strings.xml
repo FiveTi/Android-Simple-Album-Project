@@ -10,4 +10,7 @@
     <string name="preview_description">Vùng hiện ảnh hoặc video</string>
     <string name="btn_take_picture">Chụp ảnh</string>
     <string name="btn_record_video">Quay video</string>
+
+    <color name="titlebackgroundcolor">#ffffff</color>
+    <color name="titletextcolor">#ffffff</color>
 </resources>

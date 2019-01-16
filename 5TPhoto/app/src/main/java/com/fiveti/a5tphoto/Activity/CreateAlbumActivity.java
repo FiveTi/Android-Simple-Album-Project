@@ -2,6 +2,7 @@ package com.fiveti.a5tphoto.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +14,8 @@ public class CreateAlbumActivity extends AppCompatActivity {
     EditText albumName;
     Button selectImage;
     String name;
+    ActionBar actionBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +28,14 @@ public class CreateAlbumActivity extends AppCompatActivity {
                 ShowGalleySelectImage();
             }
         });
+
+        actionBar = getSupportActionBar();
+        if( actionBar != null){
+            actionBar.setTitle("5TPhoto");
+            actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+
+        }
     }
 
     void ShowGalleySelectImage()

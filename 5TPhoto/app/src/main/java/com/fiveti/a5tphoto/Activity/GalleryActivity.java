@@ -48,6 +48,7 @@ public class GalleryActivity extends AppCompatActivity {
             actionBar.setTitle(MainActivity.all_images_path.get(posAlbum).getAlbumName());
             actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
+
         }
 
     }

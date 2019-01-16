@@ -32,7 +32,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ProtectApp.CreatePassActivity"></activity>
-        <activity android:name=".ProtectApp.ConfirmPassActivity"></activity>
+        <activity android:name=".ProtectApp.ConfirmPassActivity"
+            android:theme="@style/AppTheme2"></activity>
         <activity android:name=".Activity.SlideshowActivity"></activity>
         <activity android:name=".Activity.PanoramaActivity"></activity>
         <activity
@@ -42,7 +43,8 @@
 
         </activity>
         <activity android:name=".OpenCamera.openCamera"
-            android:parentActivityName=".Activity.MainActivity">
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/AppTheme2">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.fiveti.a5tphoto.Activity.MainActivity" />
@@ -53,15 +55,15 @@
         </activity>
         <activity android:name=".Activity.GalleryActivity"
             android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+            android:theme="@style/AppTheme2">
         </activity>
         <activity android:name=".Activity.CreateAlbumActivity"
             android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+            android:theme="@style/AppTheme2">
         </activity>
         <activity android:name=".Activity.SelectImagesActivity"
             android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/AppTheme">
         </activity>
 
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"

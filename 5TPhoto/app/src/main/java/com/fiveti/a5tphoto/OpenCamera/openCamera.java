@@ -2,6 +2,7 @@ package com.fiveti.a5tphoto.OpenCamera;
 
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.fiveti.a5tphoto.Activity.MainActivity;
 import com.fiveti.a5tphoto.R;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -55,12 +57,20 @@ public class openCamera extends AppCompatActivity {
     private VideoView videoPreview;
     private Button btnCapturePicture, btnRecordVideo;
 
+    android.support.v7.app.ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_opencamera);
 
+        actionBar = getSupportActionBar();
+        if( actionBar != null){
+            actionBar.setTitle("Camera");
+            actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+
+        }
 
         // Kiểm tra thiết bị có hỗ trợ camera
         if (!CameraUtils.isDeviceSupportCamera(getApplicationContext())) {

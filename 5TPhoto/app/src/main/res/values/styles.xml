@@ -13,7 +13,18 @@
         <item name="colorAccent">@android:color/white</item>
     </style>
 
+    <style name="AppTheme2" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryColorDark</item>
+        <item name="colorAccent">@android:color/white</item>
+    </style>
+
     <style name="CusttomBackgroundPopup" parent="AppTheme">
+        <item name="android:background">@color/primaryColor</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="CusttomBackgroundPopup2" parent="AppTheme2">
         <item name="android:background">@color/primaryColor</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
