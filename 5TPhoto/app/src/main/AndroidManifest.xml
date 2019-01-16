@@ -53,6 +53,14 @@
             android:parentActivityName=".Activity.MainActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
         </activity>
+        <activity android:name=".Activity.CopyImageToDirectoryActivity"
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+        </activity>
+        <activity android:name=".Activity.MoveImageToDirectoryActivity"
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+        </activity>
         <activity android:name=".Activity.GalleryActivity"
             android:parentActivityName=".Activity.MainActivity"
             android:theme="@style/AppTheme2">

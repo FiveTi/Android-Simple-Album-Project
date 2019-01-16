@@ -267,6 +267,18 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
                 intentPano.putExtra("idAlbum", posAlbum);
                 startActivity(intentPano);
                 return true;
+            case R.id.action_Copy:
+                Intent iCopyImage = new Intent(context, CopyImageToDirectoryActivity.class);
+                iCopyImage.putExtra("idImage", posImage);
+                iCopyImage.putExtra("idAlbum", posAlbum);
+                startActivity(iCopyImage);
+                return true;
+            case R.id.action_Move:
+                Intent iMoveImage = new Intent(context, MoveImageToDirectoryActivity.class);
+                iMoveImage.putExtra("idImage", posImage);
+                iMoveImage.putExtra("idAlbum", posAlbum);
+                startActivity(iMoveImage);
+                return true;
 
         }
 

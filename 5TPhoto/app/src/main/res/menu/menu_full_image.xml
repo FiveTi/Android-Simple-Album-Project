@@ -25,6 +25,18 @@
         android:title="Info"/>
 
     <item
+        android:id="@+id/action_Copy"
+        android:orderInCategory="200"
+        app:showAsAction="never"
+        android:title="Copy to directory"/>
+
+    <item
+        android:id="@+id/action_Move"
+        android:orderInCategory="200"
+        app:showAsAction="never"
+        android:title="Move to directory"/>
+
+    <item
         android:id="@+id/action_edit_in"
         android:orderInCategory="200"
         app:showAsAction="never"
