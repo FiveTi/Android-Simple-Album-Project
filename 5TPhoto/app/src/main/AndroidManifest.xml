@@ -16,9 +16,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_gallery"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/ic_gallery"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ProtectApp.ReviewActivity">
@@ -31,6 +31,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Activity.CompressImageActivity"></activity>
         <activity android:name=".ProtectApp.CreatePassActivity"></activity>
         <activity android:name=".ProtectApp.ConfirmPassActivity"
             android:theme="@style/AppTheme2"></activity>

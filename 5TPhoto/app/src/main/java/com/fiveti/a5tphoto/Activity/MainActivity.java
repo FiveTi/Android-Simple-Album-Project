@@ -141,6 +141,11 @@ public class MainActivity extends AppCompatActivity {
                 //gửi intent email
                 startActivity(Intent.createChooser(Email, "Send Feedback:"));
                 break;
+            case R.id.action_compress_image:
+                Intent intentCompress = new Intent(this, CompressImageActivity.class);
+                startActivity(intentCompress);
+                break;
+
             case R.id.action_favorite_list:
 
                 break;

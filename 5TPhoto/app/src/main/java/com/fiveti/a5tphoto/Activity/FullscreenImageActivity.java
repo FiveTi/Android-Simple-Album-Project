@@ -185,6 +185,7 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
 
                     DecimalFormat decimalFormat = new DecimalFormat("#.##");
                     double size = file.length();
+
                     String temp = "";
 
                     if (size > 1024 * 1024) {

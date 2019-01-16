@@ -28,5 +28,11 @@
         android:title="Favorite List"
         app:showAsAction="never"
         android:icon="@drawable/ic_photo_camera_black_24dp"/>
+    <item
+        android:id="@+id/action_compress_image"
+        android:orderInCategory="100"
+        android:title="Compress image"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_photo_camera_black_24dp"/>
 
 </menu>
