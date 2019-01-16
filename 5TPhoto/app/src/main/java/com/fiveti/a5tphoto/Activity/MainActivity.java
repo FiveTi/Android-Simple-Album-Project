@@ -22,6 +22,7 @@ import com.fiveti.a5tphoto.Database.SQLiteDatabase;
 import com.fiveti.a5tphoto.Fragment.AlbumFragment;
 import com.fiveti.a5tphoto.Fragment.GalleryFragment;
 import com.fiveti.a5tphoto.Database.Album;
+import com.fiveti.a5tphoto.Database.Favorite;
 import com.fiveti.a5tphoto.OpenCamera.openCamera;
 import com.fiveti.a5tphoto.R;
 
@@ -31,6 +32,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<Album> all_images_path = new ArrayList<>();
+    public static ArrayList<Album> all_images_path_fav = new ArrayList<>();
+
     private static final int REQUEST_PERMISSIONS = 100;
 
     public static SQLiteDatabase myAlbumdb;
@@ -58,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
 
         getImagesPath(this);
         readSQliteDatabaseAlbum(myAlbumdb);
+
+        getImagesPathFav(this);
+        readSQliteDatabaseFav(myFavorite);
 
         setupViewPager(mViewPager);
         mTabLayout.setupWithViewPager(mViewPager);
@@ -153,7 +159,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.action_favorite_list:
-
+                Toast.makeText(this,"Chức năng này chưa hỗ trợ",Toast.LENGTH_LONG).show();
+//                Intent intentFAvL = new Intent(this, GalleryActivity.class);
+//                startActivity(intentFAvL);
                 break;
             case R.id.action_download_image:
                 String url = "https://drive.google.com/drive/folders/1L9gFitE3QE_Gv7104APEEoSh7ZfyXVzb?usp=sharing";
@@ -213,6 +221,47 @@ public class MainActivity extends AppCompatActivity {
                 all_images_path.add(obj_model);
             }
         }
+    }
+
+    public static void getImagesPathFav(Activity activity) {
+        all_images_path.clear();
+        Uri uri;
+        Cursor cursor;
+        Album obj_model = new Album();
+        ArrayList<String> al_path = new ArrayList<>();
+        String absolutePathOfImage = null;
+
+        uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+
+        String[] projection = {MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME};
+
+        final String orderBy = MediaStore.Images.Media.DATE_TAKEN;
+        cursor = activity.getContentResolver().query(uri, projection, null, null, orderBy + " DESC");
+        while (cursor.moveToNext()) {
+            absolutePathOfImage = cursor.getString(0);
+            al_path.add(absolutePathOfImage);
+        }
+        obj_model.setAlbumName("Favorite");
+        obj_model.setAllImagePath(al_path);
+        obj_model.setType(0);
+        all_images_path.add(obj_model);
+    }
+
+    public static void readSQliteDatabaseFav(SQLiteDatabase db) {
+        boolean boolean_folder = false;
+        int int_position = 0;
+        Cursor FavData = db.GetData("SELECT * FROM Favorite");
+        ArrayList<String> al_path = new ArrayList<>();
+
+
+        while (FavData.moveToNext()) {
+            al_path.add(FavData.getString(0));
+        }
+        Album obj_model = new Album();
+        obj_model.setAlbumName("Favorite");
+        obj_model.setAllImagePath(al_path);
+        obj_model.setType(1);
+        all_images_path.add(obj_model);
     }
 
     public static void readSQliteDatabaseAlbum(SQLiteDatabase db)

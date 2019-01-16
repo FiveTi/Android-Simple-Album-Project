@@ -266,6 +266,11 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
                 iMoveImage.putExtra("idAlbum", posAlbum);
                 startActivity(iMoveImage);
                 return true;
+            case R.id.nva_favorite:
+                boolean a =false;
+                AddFav(a);
+
+                return true;
 
         }
 
@@ -279,6 +284,31 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
             type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
         }
         return type;
+    }
+    public void AddFav(boolean a)
+    {
+        String idImage = allPath.get(posAlbum).getAllImagePath().get(posImage);
+        Cursor favoriteData = myFavorite.GetData("SELECT * FROM Favorite");
+
+        while (favoriteData.moveToNext())
+        {
+            String ten=favoriteData.getString(0);
+            if(idImage.equals(favoriteData.getString(0))) {
+                a=true;
+                break;
+            }
+        }
+        if( a==false) {
+
+            myFavorite.QueryData("INSERT INTO Favorite VALUES ('" + idImage + "')");
+            Toast.makeText(FullscreenImageActivity.this, "Đã thêm vào mục yêu thích!", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            myFavorite.QueryData("DELETE FROM Favorite WHERE Image_Path ='" + idImage + "'");
+            Toast.makeText(FullscreenImageActivity.this, "Đã xoá khỏi mục yêu thích!", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private String getImageInfo(ExifInterface exifInterface) {

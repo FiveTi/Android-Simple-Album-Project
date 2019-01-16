@@ -6,14 +6,14 @@ import java.util.ArrayList;
 public class Favorite implements Serializable {
 
 
-    ArrayList<String> allImagePath;
+    String allImagePath;
 
 
-    public ArrayList<String> getAllImagePath() {
+    public String getAllImagePath() {
         return allImagePath;
     }
 
-    public void setAllImagePath(ArrayList<String> allImagePath) {
+    public void setAllImagePath(String allImagePath) {
         this.allImagePath = allImagePath;
     }
 
