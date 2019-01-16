@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:autoStart="true"
         android:focusable="true"
-        android:flipInterval="1500"
+        android:flipInterval="2500"
         android:inAnimation="@android:anim/slide_in_left"
         android:outAnimation="@android:anim/slide_out_right"
         app:layout_constraintBottom_toBottomOf="parent"
