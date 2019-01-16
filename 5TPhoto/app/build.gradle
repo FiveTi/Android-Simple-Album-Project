@@ -36,5 +36,5 @@ dependencies {
     implementation 'com.gjiazhe:PanoramaImageView:1.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.github.Q42:AndroidScrollingImageView:1.3.3'
-    implementation files('C:/Users/Admin/Desktop/Project/Android-Simple-Album-Project/5TPhoto/lib/commons-io-2.4.jar')
+    implementation files('D:/Nam03/Semester1/GitKraken/Android-Simple-Album-Project/5TPhoto/lib/commons-io-2.4.jar')
 }
