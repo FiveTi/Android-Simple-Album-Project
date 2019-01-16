@@ -74,6 +74,15 @@
             android:parentActivityName=".Activity.MainActivity"
             android:theme="@style/AppTheme">
         </activity>
+        <activity android:name=".Activity.SelectImg3d"
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity android:name=".PhotoThreeD.MyGLActivity"
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/AppTheme">
+        </activity>
+
 
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat"/> <!-- optional (needed if default theme has no action bar) -->

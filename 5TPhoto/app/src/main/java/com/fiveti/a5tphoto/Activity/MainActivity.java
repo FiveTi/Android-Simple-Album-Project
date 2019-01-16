@@ -16,6 +16,7 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.fiveti.a5tphoto.Database.SQLiteDatabase;
 import com.fiveti.a5tphoto.Fragment.AlbumFragment;
@@ -140,6 +141,12 @@ public class MainActivity extends AppCompatActivity {
 
                 //gửi intent email
                 startActivity(Intent.createChooser(Email, "Send Feedback:"));
+                break;
+            case R.id.action_view:
+                Intent iCreate = new Intent(this, SelectImg3d.class);
+                startActivity(iCreate);
+
+                Toast.makeText(this,"Vui lòng chọn 6 hình",Toast.LENGTH_LONG).show();
                 break;
             case R.id.action_compress_image:
                 Intent intentCompress = new Intent(this, CompressImageActivity.class);
