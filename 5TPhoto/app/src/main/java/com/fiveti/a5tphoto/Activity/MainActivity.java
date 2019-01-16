@@ -22,7 +22,6 @@ import com.fiveti.a5tphoto.Database.SQLiteDatabase;
 import com.fiveti.a5tphoto.Fragment.AlbumFragment;
 import com.fiveti.a5tphoto.Fragment.GalleryFragment;
 import com.fiveti.a5tphoto.Database.Album;
-import com.fiveti.a5tphoto.Database.Favorite;
 import com.fiveti.a5tphoto.OpenCamera.openCamera;
 import com.fiveti.a5tphoto.R;
 
@@ -156,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_favorite_list:
 
                 break;
-            case R.id.action_add_image:
+            case R.id.action_download_image:
                 String url = "https://drive.google.com/drive/folders/1L9gFitE3QE_Gv7104APEEoSh7ZfyXVzb?usp=sharing";
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
