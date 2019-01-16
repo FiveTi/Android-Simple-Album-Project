@@ -40,5 +40,10 @@
         android:title="Compress image"
         app:showAsAction="never"
         android:icon="@drawable/ic_photo_camera_black_24dp"/>
-
+    <item
+        android:id="@+id/action_add_image"
+        android:orderInCategory="100"
+        android:title="Add image"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_photo_camera_black_24dp"/>
 </menu>

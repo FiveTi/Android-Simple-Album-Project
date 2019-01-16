@@ -9,7 +9,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -38,13 +37,9 @@ import android.widget.Toast;
 
 import com.fiveti.a5tphoto.Adapter.FullscreenImageAdapter;
 import com.fiveti.a5tphoto.Database.Album;
-import com.fiveti.a5tphoto.Database.Favorite;
 import com.fiveti.a5tphoto.BuildConfig;
 import com.fiveti.a5tphoto.Database.SQLiteDatabase;
-import com.fiveti.a5tphoto.Fragment.AlbumFragment;
-import com.fiveti.a5tphoto.Fragment.GalleryFragment;
 import com.fiveti.a5tphoto.R;
-import com.q42.android.scrollingimageview.ScrollingImageView;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -251,16 +246,7 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
                 return true;
 
             case R.id.action_edit_in:
-                Intent editIntent = new Intent(Intent.ACTION_EDIT);
-                final File photoFile = new File(curPath);
-                Uri photoURI = FileProvider.getUriForFile(context,
-                        BuildConfig.APPLICATION_ID + ".provider",
-                        photoFile);
-                editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                editIntent.setDataAndType(photoURI,"image/jpg");
-                editIntent.putExtra(Intent.EXTRA_STREAM, photoURI);
 
-                startActivity(Intent.createChooser(editIntent, null));
                 return true;
             case R.id.action_panorama:
                 Intent intentPano = new Intent(context, PanoramaActivity.class);
@@ -430,9 +416,9 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
         AlertDialog builder;
         builder = new AlertDialog.Builder(context, android.R.style.Theme_DeviceDefault_Dialog_Alert).create();
 
-        builder.setMessage("Xóa ảnh?");
+        builder.setMessage("Dô you want to delete this image");
         //Nếu nhấn Xóa
-        builder.setButton(Dialog.BUTTON_POSITIVE, "Xóa", new DialogInterface.OnClickListener() {
+        builder.setButton(Dialog.BUTTON_POSITIVE, "Delete", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 //int pos = getPosImageReal();
                 int pos = posImage;
@@ -455,9 +441,9 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
                         long id = c.getLong(c.getColumnIndexOrThrow(MediaStore.Images.Media._ID));
                         Uri deleteUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
                         contentResolver.delete(deleteUri, null, null);
-                        Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(context, "Xóa không thành công", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Fail", Toast.LENGTH_SHORT).show();
                     }
                     c.close();
                 }
@@ -508,19 +494,23 @@ public class FullscreenImageActivity extends AppCompatActivity implements Bottom
                 /*Toast.makeText(FullscreenImageActivity.this, "Chức năng tạm thời chưa hỗ trợ!", Toast.LENGTH_SHORT).show();*/
                 startActivity(Intent.createChooser(shareIntent(), "Chia sẻ ảnh đang sử dụng"));
                 break;
-            case R.id.nav_filter:
-                Toast.makeText(FullscreenImageActivity.this, "Chức năng tạm thời chưa hỗ trợ!", Toast.LENGTH_SHORT).show();
+            case R.id.nav_edit:
+                Intent editIntent = new Intent(Intent.ACTION_EDIT);
+                final File photoFile = new File(curPath);
+                Uri photoURI = FileProvider.getUriForFile(context,
+                        BuildConfig.APPLICATION_ID + ".provider",
+                        photoFile);
+                editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                editIntent.setDataAndType(photoURI,"image/jpg");
+                editIntent.putExtra(Intent.EXTRA_STREAM, photoURI);
+
+                startActivity(Intent.createChooser(editIntent, null));
                 break;
             case R.id.nav_crop:
                 Crop();
                 break;
             case R.id.nva_delete:
                 DeleteImage();
-                break;
-            case R.id.nva_favorite:
-                String ip = curPath;
-                myFavorite.QueryData("INSERT INTO Favorite VALUES ('"+ip+"')");
-                Toast.makeText(FullscreenImageActivity.this, "Đã thêm vào mục yêu thích!", Toast.LENGTH_SHORT).show();
                 break;
         }
         return false;

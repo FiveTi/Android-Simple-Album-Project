@@ -20,8 +20,8 @@ public class CreateAlbumActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_album);
-        albumName = (EditText)findViewById(R.id.album_name_editText);
-        selectImage = (Button)findViewById(R.id.select_image_button);
+        albumName = (EditText) findViewById(R.id.album_name_editText);
+        selectImage = (Button) findViewById(R.id.select_image_button);
         selectImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -30,7 +30,7 @@ public class CreateAlbumActivity extends AppCompatActivity {
         });
 
         actionBar = getSupportActionBar();
-        if( actionBar != null){
+        if (actionBar != null) {
             actionBar.setTitle("5TPhoto");
             actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -38,11 +38,17 @@ public class CreateAlbumActivity extends AppCompatActivity {
         }
     }
 
-    void ShowGalleySelectImage()
-    {
+    void ShowGalleySelectImage() {
+        String name = albumName.getText().toString();
+        if (name.isEmpty()) {
+            albumName.setError("Please type album name");
+            albumName.requestFocus();
+            return;
+        }
+
         Intent iCreateAl = new Intent(this, SelectImagesActivity.class);
         Bundle bCreateAl = new Bundle();
-        bCreateAl.putString("albumName", albumName.getText().toString());
+        bCreateAl.putString("albumName", name);
         iCreateAl.putExtras(bCreateAl);
         startActivity(iCreateAl);
     }

@@ -126,9 +126,9 @@ public class CompressImageActivity extends AppCompatActivity {
                             Toast.makeText(CompressImageActivity.this, "Image compressed", Toast.LENGTH_SHORT).show();
                             InsertImageToGallery(getContentResolver(), b);
                             finish();
-                            ;
-                            Intent iCopyImage = new Intent(CompressImageActivity.this, MainActivity.class);
-                            startActivity(iCopyImage);
+
+                            Intent intentMain = new Intent(CompressImageActivity.this, MainActivity.class);
+                            startActivity(intentMain);
                         }
                     }
                 });

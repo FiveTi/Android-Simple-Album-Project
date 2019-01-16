@@ -156,6 +156,12 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_favorite_list:
 
                 break;
+            case R.id.action_add_image:
+                String url = "https://drive.google.com/drive/folders/1L9gFitE3QE_Gv7104APEEoSh7ZfyXVzb?usp=sharing";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

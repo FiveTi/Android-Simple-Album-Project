@@ -9,7 +9,7 @@
         android:icon="@drawable/ic_share"
         android:title="Share"/>
     <item
-        android:id="@+id/nav_filter"
+        android:id="@+id/nav_edit"
         android:icon="@drawable/ic_filter"
         android:title="Filter" />
     <item
@@ -20,8 +20,5 @@
         android:id="@+id/nva_delete"
         android:icon="@drawable/ic_delete"
         android:title="Delete" />
-    <item
-        android:id="@+id/nva_favorite"
-        android:icon="@drawable/fav_checkbox_list"
-        android:title="Favorite" />
+
 </menu>

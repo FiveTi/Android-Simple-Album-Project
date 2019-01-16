@@ -29,7 +29,11 @@
         android:orderInCategory="200"
         app:showAsAction="never"
         android:title="Copy to directory"/>
-
+    <item
+        android:id="@+id/nva_favorite"
+        android:icon="@drawable/fav_checkbox_list"
+        app:showAsAction="always"
+        android:title="Favorite" />
     <item
         android:id="@+id/action_Move"
         android:orderInCategory="200"
